@@ -1,0 +1,19 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 30 oct. 2016, 21:14:19
+    Author     : marc
+*/
+
+/* pour pc de bureau */
+@import url("./css_pc.css") only screen and (min-width:1101px);
+/* valeur par défaut 760 mais je prefere ici mettre 1100 qui correspond a mon cadre de mon site */
+
+/* pour tablettes */
+@import url("./css_tablette.css") only screen and (min-width:321px) and (max-width:1100px);
+
+/*site pour mobile*/
+@import url("./css_smartphone.css") only screen and (max-width:320px);

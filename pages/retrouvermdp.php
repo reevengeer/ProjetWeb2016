@@ -1,0 +1,121 @@
+<?php
+    session_start();
+?>
+<h1 class='titre'>Retrouver son mot de passe</h1>
+<div class='legerement_a_droite'>
+    <div class="container largeur">
+        <div class="table table-bordered">
+            
+            <form action="index.php?page=retrouvermdp.php" method="POST" class="form-horizontal cadre">
+                
+                <div class="form-group">
+                  <label class="control-label col-sm-2 evidence" for="Identifiant">Identifiant :</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="Identifiant" name="Identifiant" placeholder="Votre identifiant">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-2 evidence" for="nom">Nom :</label>
+                  <div class="col-sm-10"> 
+                    <input type="text" class="form-control" id="nom" name="nom" placeholder="Votre nom utilisé lors de l'enregistrement">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-2 evidence" for="prenom">Prénom :</label>
+                  <div class="col-sm-10"> 
+                    <input type="text" class="form-control" id="prenom" name="prenom" placeholder="Votre prénom utilisé lors de l'enregistrement">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-2 evidence" for="ville">Ville :</label>
+                  <div class="col-sm-10"> 
+                    <input type="text" class="form-control" id="ville" name="ville" placeholder="Votre ville utilisé lors de l'enregistrement">
+                  </div>
+                </div>
+                <div class="form-group"> 
+                  <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary" value="Confirmer" name="Confirmer">Confirmer</button>
+                    <button type="reset" class="btn btn-danger">Annuler</button>
+                  </div>
+                </div>
+                
+            </form>
+            
+        </div>
+        
+        <?php 
+            $flag=0;
+            if(isset($_POST['Confirmer']))
+            {
+		if($_POST['Identifiant']!="" && $_POST['nom']!="" && $_POST['prenom']!="" && $_POST['ville']!="")
+		{
+                    $flag=1;
+                    //$query = $cnx->prepare("SELECT * FROM CLIENT WHERE login='".$_POST["Identifiant"]."' AND password='".$_POST["mdp"]."'");
+                    $query = "select * from client where login='".$_POST["Identifiant"]."' AND NOM='".$_POST["nom"]."' AND PRENOM='".$_POST["prenom"]."' AND VILLE='".$_POST["ville"]."'";
+
+                    $resultset = $cnx->prepare($query);
+
+                    $resultset->execute();
+                    $data = $resultset->fetchAll();
+
+                    $nbr= count($data);
+                    for($i = 0;$i < $nbr ;$i++)
+                    {
+                        //print "<br>".$data[$i]['nom'];
+                        $_SESSION['id_client'] = $data[$i]['id_client'];
+                        $_SESSION['nom'] = $data[$i]['nom'];
+                        $_SESSION['prenom'] =$data[$i]['prenom'];
+                        $_SESSION['reduction'] = $data[$i]['reduction'];
+                        $_SESSION['ville'] = $data[$i]['ville'];
+                        $_SESSION['adresse'] = $data[$i]['adresse'];
+                        $_SESSION['login'] = $data[$i]['login'];
+                        $_SESSION['password'] = $data[$i]['password'];
+                    }
+                    if (count($data)!=0)
+                    {
+                        header('Location: index.php?page=client/accueilClient.php');
+                    }
+                    else if (count($data)==0)
+                    {
+                        $query = "select * from Administrateur where login='".$_POST["Identifiant"]."' AND NOM='".$_POST["nom"]."' AND PRENOM='".$_POST["prenom"]."' AND VILLE='".$_POST["ville"]."'";
+
+                        $resultset = $cnx->prepare($query);
+
+                        $resultset->execute();
+                        $data = $resultset->fetchAll();
+
+                        $nbr= count($data);
+                        for($i = 0;$i < $nbr ;$i++)
+                        {
+                            //print "<br>".$data[$i]['nom'];
+                            $_SESSION['id_administrateur'] = $data[$i]['id_administrateur'];
+                            $_SESSION['nom'] = $data[$i]['nom'];
+                            $_SESSION['prenom'] =$data[$i]['prenom'];
+                            $_SESSION['salaire'] = $data[$i]['salaire'];
+                            $_SESSION['ville'] = $data[$i]['ville'];
+                            $_SESSION['adresse'] = $data[$i]['adresse'];
+                            $_SESSION['login'] = $data[$i]['login'];
+                            $_SESSION['password'] = $data[$i]['password'];
+                        }
+                        if (count($data)!=0)
+                        {
+                            $message="Votre mot de passe est : ".$_SESSION['password'];
+
+                            echo '<script type="text/javascript">window.alert("'.$message.'");</script>';
+                        }
+                        else 
+                        {
+                            ?>
+                            <p class="evidence grand">Personne ne correspond aux valeurs entrées.</p>
+                           <?php
+                        }
+                     }
+                }
+            else
+            {
+                print 'champs non remplis.';
+            }
+        }
+    ?>
+    </div>    
+</div>

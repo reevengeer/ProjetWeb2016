@@ -1,0 +1,114 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 30 oct. 2016, 21:14:05
+    Author     : marc
+*/
+a
+{
+    color:white;
+}
+.droite
+{
+    float:right;
+}
+.gauche
+{
+    float:left;
+}
+.gauche_footer
+{
+    margin-left: auto;
+    margin-right: auto;
+}
+#footer
+{
+    color : darkturquoise;
+    text-align: center;
+}
+body
+{
+    background-image: url("../../images/videotheque.jpg");
+    margin-left: 15px;
+}
+.centre
+{
+    text-align: center;
+}
+.menu
+{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.legerement_en_dessous
+{
+    margin-top: 10px;
+}
+.droite_avec_bordure
+{
+    float:right;
+    margin-right: 25px;
+    color: salmon;
+}
+#gras_accueil
+{
+    font-weight: bold;
+    color: cyan;
+    font-size: 140%;
+}
+#texteaccueil
+{
+    color:  crimson;
+    font-style: italic;
+    font-size: 100%;
+}
+.gras
+{
+    color: aqua;
+    text-decoration : underline;
+    font-weight: bold;
+}
+#devise
+{
+    text-align: center;
+    color: coral;
+    font-style: italic;
+    font-size: 150%;
+    text-decoration : underline;
+}
+.titre
+{
+    color:salmon;
+    text-align: center;
+    text-decoration : underline;
+}
+.evidence
+{
+    color: dodgerblue;
+}
+.legerement_a_droite
+{
+    margin-left: 20px;
+    margin-right:20px;
+}
+.aqua
+{
+    color:aqua;
+}
+.deeppink
+{
+    color:deeppink;
+}
+.souligner
+{
+    text-decoration: underline;
+}
+.deux
+{
+    text-decoration: underline;
+    font-weight: bold;
+}

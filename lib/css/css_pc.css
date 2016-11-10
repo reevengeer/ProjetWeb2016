@@ -1,0 +1,158 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 30 oct. 2016, 21:13:41
+    Author     : marc
+*/
+a
+{
+    color:white;
+}
+.droite
+{
+    float:right;
+}
+.gauche
+{
+    float:left;
+}
+.gauche_footer
+{
+    float: left;
+}
+footer
+{
+    text-align: center;
+    color : darkturquoise;
+    margin-left: 325px;
+    margin-right: 325px;
+}
+body /* le corps ne depassera pas 1100 px de large */
+{
+    background-image: url("../../images/popcorn.jpg");
+}
+.centre
+{
+    text-align: center;
+}
+.menu
+{
+    margin-bottom: 15px;
+    text-align: center;
+}
+#format /* le corps ne depassera pas 1100 px de large */
+{
+    width: 1100px;
+    margin: auto;
+    /*margin-top: 10px; *//*inutile avec le message montrant si la connexion a été établie*/
+    margin-bottom: 10px;
+    background-image: url("../../images/videotheque.jpg");
+    border-radius: 10px;
+}
+.legerement_en_dessous
+{
+    margin-top: 10px;
+}
+.legerement_a_droite
+{
+    margin-left: 20px;
+}
+.droite_avec_bordure
+{
+    float:right;
+    margin-right: 25px;
+    color: salmon;
+}
+#gras_accueil
+{
+    font-weight: bold;
+    color: cyan;
+    font-size: 140%;
+}
+#texteaccueil
+{
+    color:  crimson;
+    font-style: italic;
+    font-size: 100%;
+}
+.gras
+{
+    font-weight: bold;
+}
+#devise
+{
+    text-align: center;
+    color: coral;
+    font-style: italic;
+    font-size: 150%;
+    text-decoration : underline;
+}
+header
+{
+    text-align: center;
+    width: 916px;
+    height: 181px;
+    margin-left: 92px;
+    margin-right:92px;
+    background-image : url("../../images/banniere.jpg");
+}
+.titre
+{
+    color:salmon;
+    text-align: center;
+    margin-left: 330px;
+    margin-right: 320px;
+    text-decoration : underline;
+}
+.evidence
+{
+    color: dodgerblue;
+}
+.droitePlus
+{
+    margin-left: 200px;
+}
+.cadre
+{
+    margin-top:15px;
+    margin-right: 25px;
+}
+.largeur
+{
+    width:900px;
+}
+.grand
+{
+    font-size: 150%;
+    text-align: center;
+}
+.legerement_a_droite
+{
+    margin-left: 20px;
+    margin-right:20px;
+}
+.aqua
+{
+    color:aqua;
+}
+.souligner
+{
+    text-decoration: underline;
+}
+.deux
+{
+    text-decoration: underline;
+    font-weight: bold;
+}
+.deeppink
+{
+    color:deeppink;
+}
+#imagesAccueil
+{
+    width : 450 px;
+    height : 450 px;
+}
