@@ -1,6 +1,3 @@
-<?php
-    session_start();
-?>
 <nav class="menu">
 		<?php
                     if (file_exists('./lib/php/menuAdministrateur.php'))
@@ -33,10 +30,11 @@
 <h1 class="aqua legerement_a_droite souligner">Ajout d'un DVD</h1>
 <div class='legerement_a_droite'>
     <h2 class='evidence'>Veuillez entrer les informations du nouveaux DVD.</h2>
+    <h3 class='deeppink'>Les caractères spéciaux sont à éviter.</h3>
     <div class="container largeur">
         <div class="table table-bordered">
             
-            <form action="index.php?page=ajoutDVD.php" method="POST" class="form-horizontal cadre">
+            <form action="index.php?page=administrateur/ajoutDVD.php" method="POST" class="form-horizontal cadre">
                 
                 <div class="form-group">
                   <label class="control-label col-sm-2 evidence" for="titre">Titre :</label>
@@ -57,7 +55,7 @@
                   </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-sm-2 evidence" for="producteur">Producteur :</label>
+                    <label class="control-label col-sm-2 evidence" for="producteur">Production :</label>
                     <div class="col-sm-10"> 
                       <input type="text" class="form-inline" id="producteur" name="producteur" placeholder="Son producteur">
                     </div>
@@ -136,8 +134,9 @@
                         else if ($retour!='Le DVD a été ajouté')
                         {
                             ?>
-                            <p>Un problème est intervenue.</p>
-                            <p>Le informations entrées doivent correspondre à celle d'un autre DVD.</p>
+                            <p class="deeppink">Un problème est intervenue.</p>
+                            <p class="deeppink">1.Les informations entrées pourraient correspondre à celle d'un autre DVD.</p>
+                            <p class="deeppink">2.Les caractères spéciaux sont mal gérés par la base données.</p>
                             <?php
                         }
                     }

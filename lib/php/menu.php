@@ -1,15 +1,5 @@
 <div class="btn-group" role="group" aria-label="...">
-    <button type="button" class="btn btn-primary"><a href="index.php?page=accueil.php&amp;nav=Accueil">Accueil</a></button>
-    <button type="button" class="btn btn-warning"><a href="index.php?page=connexion.php&amp;nav=Connexion">Se connecter</a></button>
-    <button type="button" class="btn btn-danger"><a href="index.php?page=inscription.php&amp;nav=Enregistrement">Inscrivez-Vous !!</a></button>
-    <!--<button type="button" class="btn btn-info"><a href="index.php?page=location.php&amp;nav=Location">Location</a></button>-->
-    <!--<button type="button" class="btn btn-default">Lien 5</button>-->
+    <button type="button" class="btn btn-primary"><a href="index.php?page=accueil.php&amp;nav=Accueil"><span class="glyphicon glyphicon-home"> Accueil</span></a></button>
+    <button type="button" class="btn btn-warning"><a href="index.php?page=connexion.php&amp;nav=Connexion"><span class="glyphicon glyphicon-log-in"> Connectez-vous</span></button>
+    <button type="button" class="btn btn-danger"><a href="index.php?page=inscription.php&amp;nav=Enregistrement"><span class="glyphicon glyphicon-floppy-saved"> Inscrivez-vous</span></a></button>
 </div>
-
-<!-- menu de base
-<ul>
-    <li><a href="index.php?page=accueil.php&amp;nav=Accueil">Accueil</a></li>
-    <li><a href="index.php?page=location.php&amp;nav=Location">Location</a></li>
-    <li><a href="index.php?page=FAQ.php&amp;nav=FAQ">FAQ && Contactez Nous</a></li>
-    <li><a href="index.php?page=inscription.php&amp;nav=FAQ">Inscrivez-Vous !!</a></li>
-</ul>-->

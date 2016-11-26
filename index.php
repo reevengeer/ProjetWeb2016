@@ -5,6 +5,9 @@
 <?php // connexion à la base de donnée en local
 	require './lib/php/dbConnectProjetLocal.php';
 ?>
+<?php
+    session_start();
+?>
 <html>
     <head>
         <meta charset="UTF-8">
@@ -40,7 +43,7 @@
 	    </div>
             </br>
 	    <section id="contenu">
-                <hr/>
+                
                 <!-- partie sur l'ajout de la page -->
 		<?php
                     if(!isset($_SESSION['page']))

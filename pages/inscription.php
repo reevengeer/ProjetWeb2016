@@ -1,6 +1,3 @@
-<?php
-    session_start();
-?>
 <nav class="menu">
 		<?php
                     if (file_exists('./lib/php/menu.php'))

@@ -1,6 +1,3 @@
-<?php
-    session_start();
-?>
 <nav class="menu">
 <?php
     if (file_exists('./lib/php/menuClient.php'))
@@ -35,14 +32,7 @@
                             print_r($_SESSION['reduction']);
                             print "% de réduction";
                         ?>
-                    </p>
-                    <script type="text/javascript">
-                        var passWord = $_SESSION['password'] ;
-                    </script>
-                    <p class="evidence">Votre password : 
-                        <img id="motDePasse" class="droite" src="././images/pressez.png" alt="logo"/>
-                    </p>
-                   
+                    </p>                   
 
                     <h4 class="souligner">Suivez-nous sur les réseaux sociaux</h4>
                     <div>

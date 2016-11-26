@@ -1,7 +1,4 @@
 <?php 
-    session_start(); // a utiliser si on se connecte sur le serveur
-?>
-<?php 
     session_destroy(); // a utiliser si on se connecte sur le serveur
 ?>
 <nav class="menu">
@@ -23,5 +20,6 @@
     <h3> Nous ésperons que l'expérience offerte fût agréable et au plaisir de vous revoir chez nous.</h3>
     <br/>
     <h3>ADRESSE: 16 Rue du Bas du Tiers Milieu, 7000 Mordor</h3>
-    <br/><br/>
+    <br/>
+    <img class="img-responsive center-block" src="images/giphy3.gif" alt="gif1"/>
 </div>

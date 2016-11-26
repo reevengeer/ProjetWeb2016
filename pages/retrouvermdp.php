@@ -1,6 +1,3 @@
-<?php
-    session_start();
-?>
 <h1 class='titre'>Retrouver son mot de passe</h1>
 <div class='legerement_a_droite'>
     <div class="container largeur">
@@ -73,7 +70,9 @@
                     }
                     if (count($data)!=0)
                     {
-                        header('Location: index.php?page=client/accueilClient.php');
+                        $message="Votre mot de passe est : ".$_SESSION['password'];
+                        echo '<script type="text/javascript">window.alert("'.$message.'");</script>';
+                        //header('Location: index.php?page=client/accueilClient.php');
                     }
                     else if (count($data)==0)
                     {

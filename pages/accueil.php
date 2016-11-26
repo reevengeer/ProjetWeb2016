@@ -82,4 +82,5 @@
             </div>
         </div>
     </div>
+</div>
 <p id="devise"> Notre but : la satisfaction de notre clientèle.</p>

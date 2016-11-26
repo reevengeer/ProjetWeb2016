@@ -1,6 +1,3 @@
-<?php
-    session_start();
-?>
 <nav class="menu">
 		<?php
                     if (file_exists('./lib/php/menu.php'))
@@ -117,7 +114,7 @@
                         else 
                         {
                             ?>
-                            <p class="evidence grand">Personne ne correspond aux valeurs entrées.</p>
+                            <p class="deeppink grand">Personne ne correspond aux valeurs entrées.</p>
                            <?php
                         }
                      }
