@@ -80,6 +80,8 @@
                         $_SESSION['adresse'] = $data[$i]['adresse'];
                         $_SESSION['login'] = $data[$i]['login'];
                         $_SESSION['password'] = $data[$i]['password'];
+                        
+                        $_SESSION['connexion']='valide';
                     }
                     if (count($data)!=0)
                     {
@@ -106,10 +108,12 @@
                             $_SESSION['adresse'] = $data[$i]['adresse'];
                             $_SESSION['login'] = $data[$i]['login'];
                             $_SESSION['password'] = $data[$i]['password'];
+                            
+                            $_SESSION['connexion']='valide';
                         }
                         if (count($data)!=0)
                         {
-                            header('Location: index.php?page=administrateur/ajoutDVD.php');  
+                            header('Location: index.php?page=administrateur/retourLocation.php');  
                         }
                         else 
                         {

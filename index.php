@@ -58,7 +58,7 @@
                     }
                     else
                     {
-			echo "page en construction";
+			echo '<p class="evidence centre">page en construction</p>';
                     }
 		?>
                 <hr/>

@@ -1,3 +1,7 @@
+<?php
+    if(isset($_SESSION['connexion']))
+    {
+?>
 <nav class="menu">
 		<?php
                     if (file_exists('./lib/php/menuClient.php'))
@@ -11,8 +15,69 @@
 		    }
 		?>
 </nav>
-<h1 class="aqua legerement_a_droite">Modification de ses informations</h1>
+<h1 class="aqua legerement_a_droite souligner">Modification de ses informations</h1>
 <div class='legerement_a_droite'>
+    <?php 
+            $flag=0;
+            if(isset($_POST['Modifier']))
+            {
+                ?><br/><?php
+                if($_POST['mdp1']!=$_POST['mdp2'])
+                {
+                    echo '<p class="deeppink grand">Votre nouveau mot de passe doit être identique dans les deux cases</p>';
+                }
+                else
+                {
+                    if($_POST['ville']!=""&& $_POST['adresse']!=""&& $_POST['login']!=""&& $_POST['mdp1']!=""&& $_POST['mdp1']==$_POST['mdp2'])
+                    {
+
+                            //print 'ok';
+
+                            $flag=1;
+                            $query="select update_client(:nom,:prenom,:ville,:adresse,:login,:password)";
+                            $resultset = $cnx->prepare($query);
+
+                            $resultset -> bindValue(1,$_SESSION['nom']);
+                            $resultset -> bindValue(2,$_SESSION['prenom']); 
+                            $resultset -> bindValue(3,$_POST['ville']); 
+                            $resultset -> bindValue(4,$_POST['adresse']);
+                            $resultset -> bindValue(5,$_POST['login']);
+                            $resultset -> bindValue(6,$_POST['mdp1']); 
+
+                            $resultset->execute();
+
+                            $retour = $resultset->fetchColumn(0);
+
+                            if($retour=='Client mis à jour')
+                            {
+                                $_SESSION['ville']=$_POST['ville'];
+                                $_SESSION['adresse']=$_POST['adresse'];
+                                $_SESSION['login']=$_POST['login'];
+                                
+                                ?>
+                                <p class="deeppink grand souligner">
+                                    <?php
+                                        print 'Vos informations ont bien été mis à jour dans la base de données.';
+                                    ?>
+                                </p>
+                                <?php
+                            }
+                            else if ($retour!='Client mis à jour')
+                            {
+                                ?>
+                                <p class="deeppink grand">Un problème est intervenue.</p>
+                                <?php
+                            }
+                    }
+                    else
+                    {
+                        ?>
+                            <p class="deeppink grand">Vous devez tout compléter.</p>
+                         <?php
+                    }
+                }
+            }
+        ?>
     <h2 class='evidence'>Veuillez entrer vos nouvelles informations</h2>
     <h3 class='deeppink'>Les caractères spéciaux sont à éviter.</h3>
     <div class="container largeur">
@@ -75,63 +140,13 @@
                 </div>
                 
             </form>
-        </div>
-        <?php 
-            $flag=0;
-            if(isset($_POST['Modifier']))
-            {
-                if($_POST['mdp1']!=$_POST['mdp2'])
-                {
-                    echo '<p class="deeppink grand">Votre nouveau mot de passe doit être identique dans les deux cases</p>';
-                }
-                else
-                {
-                    if($_POST['ville']!=""&& $_POST['adresse']!=""&& $_POST['login']!=""&& $_POST['mdp1']!=""&& $_POST['mdp1']==$_POST['mdp2'])
-                    {
-
-                            //print 'ok';
-
-                            $flag=1;
-                            $query="select update_client(:nom,:prenom,:ville,:adresse,:login,:password)";
-                            $resultset = $cnx->prepare($query);
-
-                            $resultset -> bindValue(1,$_SESSION['nom']);
-                            $resultset -> bindValue(2,$_SESSION['prenom']); 
-                            $resultset -> bindValue(3,$_POST['ville']); 
-                            $resultset -> bindValue(4,$_POST['adresse']);
-                            $resultset -> bindValue(5,$_POST['login']);
-                            $resultset -> bindValue(6,$_POST['mdp1']); 
-
-                            $resultset->execute();
-
-                            $retour = $resultset->fetchColumn(0);
-
-                            if($retour=='Client mis à jour')
-                            {
-                                ?>
-                                <p class="evidence grand">
-                                    <?php
-                                        print 'Vos informations ont bien été mis à jour dans la base de données.';
-                                    ?>
-                                </p>
-                                <?php
-                            }
-                            else if ($retour!='Client mis à jour')
-                            {
-                                ?>
-                                <p class="evidence grand">Un problème est intervenue.</p>
-                                <?php
-                            }
-                    }
-                    else
-                    {
-                        ?>
-                            <p class="evidence grand">Vous devez tout compléter.</p>
-                         <?php
-                    }
-                }
-            }
-        ?>
-                        
+        </div>                    
     </div>
 </div>
+<?php
+}
+else
+{
+    echo '<p class="deeppink centre">URL non accessible</p>';
+}
+?>

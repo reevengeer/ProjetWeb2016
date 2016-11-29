@@ -1,3 +1,7 @@
+<?php
+    if(isset($_SESSION['connexion']))
+    {
+?>
 <nav class="menu">
 		<?php
                     if (file_exists('./lib/php/menuAdministrateur.php'))
@@ -11,7 +15,75 @@
 		    }
 		?>
 </nav>
-<h1 class="aqua legerement_a_droite">Modification d'un DVD</h1>
+<h1 class="aqua legerement_a_droite souligner">Modification d'un DVD</h1>
+<?php 
+            $flag=0;
+            if(isset($_POST['Modifier']))
+            {
+                ?><br/><?php
+		if($_POST['titre']!="" && $_POST['realisateur']!=""&& $_POST['scenariste']!=""&& $_POST['producteur']!=""
+                        && $_POST['dateSortie']!=""&& $_POST['nbre']!=""&& $_POST['image']!="")
+		{
+                    if($_POST['nbre']>=1)
+                    {
+                        //print 'ok';
+                        
+			$flag=1;
+			$query="select update_dvd(:id_dvd,:titre,:realisateur,:scenariste,:producteur,:date_sortie,:quantite,:image_dvd,:description)";
+                        $resultset = $cnx->prepare($query);
+
+                        $resultset -> bindValue(1,$_SESSION['id_dvd']);
+                        $resultset -> bindValue(2,$_POST['titre']); 
+                        $resultset -> bindValue(3,$_POST['realisateur']); 
+                        $resultset -> bindValue(4,$_POST['scenariste']);
+                        $resultset -> bindValue(5,$_POST['producteur']);
+                        $resultset -> bindValue(6,$_POST['dateSortie']); 
+                        $resultset -> bindValue(7,$_POST['nbre']);
+                        $resultset -> bindValue(8,$_POST['image']);
+                        $resultset -> bindValue(9,$_POST['description']);
+
+                        $resultset->execute();
+
+                        $retour = $resultset->fetchColumn(0);
+
+                        if($retour=='DVD mis à jour')
+                        {
+                            ?>
+                            <p class="deeppink grand">
+                                <?php
+                                    print 'Le film ';
+                                    print_r($_POST['titre']);
+                                    print ' a bien été mis à jour dans la base de données.';
+                                ?>
+                                <br/>
+                            </p>
+                            <?php
+                        }
+                        else if ($retour!='DVD mis à jour')
+                        {
+                            ?>
+                            <p class="evidence grand">Un problème est intervenue.</p>
+                            <br/>
+                            <?php
+                        }
+                    }
+                    else
+                    {
+                        ?>
+                            <p class="evidence grand">La quantité doit être supérieure ou égale à 1.</p>
+                            <br/>
+                        <?php
+                    }
+                }
+		else
+		{
+               	    ?>
+                        <p class="evidence grand">Vous devez tout compléter.</p>
+                        <br/>
+                     <?php
+		}	
+            }
+        ?>
 <div class='legerement_a_droite'>
     <h2 class='evidence'>Veuillez entrer les informations du DVD à modifier.</h2>
     <h3 class='deeppink'>Les caractères spéciaux sont à éviter.</h3>
@@ -129,14 +201,20 @@
                         <input type="text" class="form-control" id="image" name="image" value="<?php echo $_SESSION['lien_image']; ?>">
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2 evidence" for="description">Description :</label>
+                    <div class="col-sm-10"> 
+                        <input type="text" class="form-control" id="description" name="description" placeholder="Votre éventuelle description">
+                    </div>
+                </div>
                 <div class="form-group"> 
                   <div class="col-sm-offset-2 col-sm-10">
                     <button type="submit" class="btn btn-primary" value="Modifier" name="Modifier">Confirmer modification</button>
                     <button type="reset" class="btn btn-danger">Annuler</button>
                   </div>
+                    <!--<br>
                     <br>
-                    <br>
-                    <img class="img-responsive center-block" src="images/giphy.gif" alt="gif1"/>
+                    <img class="img-responsive center-block" src="images/giphy.gif" alt="gif1"/> -->
                 </div>
                 
             </form>
@@ -144,71 +222,13 @@
         }
         ?>
             
-        </div>
-        <?php 
-            $flag=0;
-            if(isset($_POST['Modifier']))
-            {
-		if($_POST['titre']!="" && $_POST['realisateur']!=""&& $_POST['scenariste']!=""&& $_POST['producteur']!=""
-                        && $_POST['dateSortie']!=""&& $_POST['nbre']!=""&& $_POST['image']!="")
-		{
-                    if($_POST['nbre']>=1)
-                    {
-                        //print 'ok';
-                        
-			$flag=1;
-			$query="select update_dvd(:id_administrateur,:titre,:realisateur,:scenariste,:producteur,:date_sortie,:quantite,:image_dvd)";
-                        $resultset = $cnx->prepare($query);
-
-                        $resultset -> bindValue(1,$_SESSION['id_dvd']);
-                        $resultset -> bindValue(2,$_POST['titre']); 
-                        $resultset -> bindValue(3,$_POST['realisateur']); 
-                        $resultset -> bindValue(4,$_POST['scenariste']);
-                        $resultset -> bindValue(5,$_POST['producteur']);
-                        $resultset -> bindValue(6,$_POST['dateSortie']); 
-                        $resultset -> bindValue(7,$_POST['nbre']);
-                        $resultset -> bindValue(8,$_POST['image']);
-
-                        $resultset->execute();
-
-                        $retour = $resultset->fetchColumn(0);
-
-                        if($retour=='DVD mis à jour')
-                        {
-                            ?>
-                            <p class="evidence grand">
-                                <?php
-                                    print 'Le film ';
-                                    print_r($_POST['titre']);
-                                    print ' réalisé par ';
-                                    print_r($_POST['realisateur']);
-                                    print ' a bien été mis à jour dans la base de données.';
-                                ?>
-                            </p>
-                            <?php
-                        }
-                        else if ($retour!='DVD mis à jour')
-                        {
-                            ?>
-                            <p class="evidence grand">Un problème est intervenue.</p>
-                            <?php
-                        }
-                    }
-                    else
-                    {
-                        ?>
-                            <p class="evidence grand">La quantité doit être supérieure ou égale à 1.</p>
-                        <?php
-                    }
-                }
-		else
-		{
-               	    ?>
-                        <p class="evidence grand">Vous devez tout compléter.</p>
-                     <?php
-		}	
-            }
-        ?>
-                        
+        </div>         
     </div>
 </div>
+<?php
+}
+else
+{
+    echo '<p class="deeppink centre">URL non accessible</p>';
+}
+?>

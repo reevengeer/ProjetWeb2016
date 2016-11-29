@@ -113,3 +113,39 @@ body
     text-decoration: underline;
     font-weight: bold;
 }
+.imagelocation
+{
+	width: 255px;
+	height: 143px;
+	margin-right: 15px;
+	margin-left: 15px;
+	margin-top: 15px;
+	margin-bottom: 15px;
+	border: 3px solid midnightblue;
+}
+.blanc
+{
+    color: white;
+}
+#historique
+{
+    border-collapse: collapse; /* Les bordures du tableau seront collées (plus joli) */
+}
+.tdHistorrique
+{
+    border: 3px solid white;
+    width: 125px;
+    height: 35px;
+}
+.tdHistorrique450
+{
+    border: 3px solid white;
+    width: 450px;
+    height: 35px;
+}
+.tdHistorrique200
+{
+    border: 3px solid white;
+    width: 200px;
+    height: 35px;
+}

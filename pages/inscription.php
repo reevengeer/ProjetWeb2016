@@ -120,6 +120,8 @@
                                 $_SESSION['adresse'] = $data[$i]['adresse'];
                                 $_SESSION['login'] = $data[$i]['login'];
                                 $_SESSION['password'] = $data[$i]['password'];
+                                
+                                $_SESSION['connexion']='valide';
                             }
 
                             header('Location: index.php?page=client/accueilClient.php'); 

@@ -1,3 +1,7 @@
+<?php
+    if(isset($_SESSION['connexion']))
+    {
+?>
 <nav class="menu">
 <?php
     if (file_exists('./lib/php/menuClient.php'))
@@ -11,7 +15,7 @@
     }
 ?>
 </nav>
-<h1 class="centre evidence">Accueil client</h1>
+<h1 class="centre evidence souligner">Accueil client</h1>
 <div class="well">
     <div class="container-fluid">
         <div class="row">
@@ -21,9 +25,9 @@
                     <p class="evidence">Bonjour 
                         <span class="souligner">
                             <?php
-                                print_r($_SESSION['nom']);
-                                print " ";
                                 print_r($_SESSION['prenom']);
+                                print " ";
+                                print_r($_SESSION['nom']);
                             ?>
                         </span>
                     </p>
@@ -88,3 +92,10 @@
         </div>
     </div>
 </div>
+<?php
+}
+else
+{
+    echo '<p class="deeppink centre">URL non accessible</p>';
+}
+?>
