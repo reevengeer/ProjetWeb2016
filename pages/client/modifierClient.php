@@ -1,5 +1,5 @@
 <?php
-    if(isset($_SESSION['connexion']))
+    if(isset($_SESSION['connexionClient']))
     {
 ?>
 <nav class="menu">
@@ -22,31 +22,16 @@
             if(isset($_POST['Modifier']))
             {
                 ?><br/><?php
-                if($_POST['mdp1']!=$_POST['mdp2'])
+                if($_POST['password']!=$_POST['mdp2'])
                 {
                     echo '<p class="deeppink grand">Votre nouveau mot de passe doit être identique dans les deux cases</p>';
                 }
                 else
                 {
-                    if($_POST['ville']!=""&& $_POST['adresse']!=""&& $_POST['login']!=""&& $_POST['mdp1']!=""&& $_POST['mdp1']==$_POST['mdp2'])
+                    if($_POST['ville']!=""&& $_POST['adresse']!=""&& $_POST['login']!=""&& $_POST['password']!=""&& $_POST['password']==$_POST['mdp2'])
                     {
-
-                            //print 'ok';
-
-                            $flag=1;
-                            $query="select update_client(:nom,:prenom,:ville,:adresse,:login,:password)";
-                            $resultset = $cnx->prepare($query);
-
-                            $resultset -> bindValue(1,$_SESSION['nom']);
-                            $resultset -> bindValue(2,$_SESSION['prenom']); 
-                            $resultset -> bindValue(3,$_POST['ville']); 
-                            $resultset -> bindValue(4,$_POST['adresse']);
-                            $resultset -> bindValue(5,$_POST['login']);
-                            $resultset -> bindValue(6,$_POST['mdp1']); 
-
-                            $resultset->execute();
-
-                            $retour = $resultset->fetchColumn(0);
+                        $log = new clientBD($cnx);
+                        $retour=$log->modifierClient($_SESSION['nom'],$_SESSION['prenom'],$_POST['ville'],$_POST['adresse'],$_POST['login'],$_POST['password']);
 
                             if($retour=='Client mis à jour')
                             {
@@ -121,9 +106,9 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="control-label col-sm-2 evidence" for="mdp1">Password :</label>
+                  <label class="control-label col-sm-2 evidence" for="password">Password :</label>
                   <div class="col-sm-10"> 
-                      <input type="password" class="form-control" id="mdp1" name="mdp1" placeholder="votre nouveau mot de passe">
+                      <input type="password" class="form-control" id="password" name="password" placeholder="votre nouveau mot de passe">
                   </div>
                 </div>
                 <div class="form-group">

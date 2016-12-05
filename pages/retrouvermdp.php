@@ -46,16 +46,11 @@
             {
 		if($_POST['Identifiant']!="" && $_POST['nom']!="" && $_POST['prenom']!="" && $_POST['ville']!="")
 		{
-                    $flag=1;
-                    //$query = $cnx->prepare("SELECT * FROM CLIENT WHERE login='".$_POST["Identifiant"]."' AND password='".$_POST["mdp"]."'");
-                    $query = "select * from client where login='".$_POST["Identifiant"]."' AND NOM='".$_POST["nom"]."' AND PRENOM='".$_POST["prenom"]."' AND VILLE='".$_POST["ville"]."'";
-
-                    $resultset = $cnx->prepare($query);
-
-                    $resultset->execute();
-                    $data = $resultset->fetchAll();
-
+                    $log = new clientBD($cnx);
+                    $data=$log->retrouverMDPClient($_POST['Identifiant'],$_POST['nom'],$_POST['prenom'],$_POST['ville']);
+                        
                     $nbr= count($data);
+                    
                     for($i = 0;$i < $nbr ;$i++)
                     {
                         //print "<br>".$data[$i]['nom'];
@@ -76,14 +71,11 @@
                     }
                     else if (count($data)==0)
                     {
-                        $query = "select * from Administrateur where login='".$_POST["Identifiant"]."' AND NOM='".$_POST["nom"]."' AND PRENOM='".$_POST["prenom"]."' AND VILLE='".$_POST["ville"]."'";
-
-                        $resultset = $cnx->prepare($query);
-
-                        $resultset->execute();
-                        $data = $resultset->fetchAll();
-
+                        $log = new administrateurBD($cnx);
+                        $data=$log->retrouverMDPAdministrateur($_POST['Identifiant'],$_POST['nom'],$_POST['prenom'],$_POST['ville']);
+                        
                         $nbr= count($data);
+                        
                         for($i = 0;$i < $nbr ;$i++)
                         {
                             //print "<br>".$data[$i]['nom'];

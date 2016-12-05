@@ -3,7 +3,7 @@
 	//require './lib/php/dbConnectProjetOnline.php';
 ?>
 <?php // connexion à la base de donnée en local
-	require './lib/php/dbConnectProjetLocal.php';
+	require './lib/php/liste_include.php';
 ?>
 <?php
     session_start();

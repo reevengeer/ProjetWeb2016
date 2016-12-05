@@ -1,5 +1,5 @@
 <?php
-    if(isset($_SESSION['connexion']))
+    if(isset($_SESSION['connexionAdministrateur']))
     {
 ?>
 <nav class="menu">
@@ -22,29 +22,12 @@
             {
                 ?><br/><?php
 		if($_POST['titre']!="" && $_POST['realisateur']!=""&& $_POST['scenariste']!=""&& $_POST['producteur']!=""
-                        && $_POST['dateSortie']!=""&& $_POST['nbre']!=""&& $_POST['image']!="")
+                        && $_POST['date_sortie']!=""&& $_POST['quantite']!=""&& $_POST['image_dvd']!="")
 		{
-                    if($_POST['nbre']>=1)
+                    if($_POST['quantite']>=1)
                     {
-                        //print 'ok';
-                        
-			$flag=1;
-			$query="select update_dvd(:id_dvd,:titre,:realisateur,:scenariste,:producteur,:date_sortie,:quantite,:image_dvd,:description)";
-                        $resultset = $cnx->prepare($query);
-
-                        $resultset -> bindValue(1,$_SESSION['id_dvd']);
-                        $resultset -> bindValue(2,$_POST['titre']); 
-                        $resultset -> bindValue(3,$_POST['realisateur']); 
-                        $resultset -> bindValue(4,$_POST['scenariste']);
-                        $resultset -> bindValue(5,$_POST['producteur']);
-                        $resultset -> bindValue(6,$_POST['dateSortie']); 
-                        $resultset -> bindValue(7,$_POST['nbre']);
-                        $resultset -> bindValue(8,$_POST['image']);
-                        $resultset -> bindValue(9,$_POST['description']);
-
-                        $resultset->execute();
-
-                        $retour = $resultset->fetchColumn(0);
+                        $log = new dvdBD($cnx);
+                        $retour=$log->modifierDVD($_SESSION['id_dvd'],$_POST['titre'],$_POST['realisateur'],$_POST['scenariste'],$_POST['producteur'],$_POST['date_sortie'],$_POST['quantite'],$_POST['image_dvd'],$_POST['description']);
 
                         if($retour=='DVD mis à jour')
                         {
@@ -95,12 +78,8 @@
                     <label class="control-label col-sm-2 evidence" for="titre">DVD à modifier :</label>
                     <div class="col-sm-10">
                     <?php            
-                        $query="select * from dvd";
-
-                        $resultset = $cnx->prepare($query);
-
-                        $resultset->execute();
-                        $data = $resultset->fetchAll();
+                        $log = new dvdBD($cnx);
+                        $data=$log->tousLesDVD();
 
                         $nbr= count($data);
 
@@ -134,27 +113,24 @@
         if(isset($_POST['DVD_choisi']))
         {
             $DvdChoisi = $_POST['film']; // correspond à l'id du dvd choisi
-            $query="select * from dvd where id_dvd=".$DvdChoisi;
+                        
+            $log = new dvdBD($cnx);
+            $data=$log->informationsDVDDEpuisSonID($DvdChoisi);
 
-                        $resultset = $cnx->prepare($query);
+            $nbr= count($data);
 
-                        $resultset->execute();
-                        $data = $resultset->fetchAll();
-
-                        $nbr= count($data);
-
-                        for($i = 0;$i < $nbr ;$i++)
-                        {
-                            //print "<br>".$data[$i]['titre'];
-                            $_SESSION['id_dvd'] = $data[$i]['id_dvd'];
-                            $_SESSION['titre'] = $data[$i]['titre'];
-                            $_SESSION['realisateur'] = $data[$i]['realisateur'];
-                            $_SESSION['scenariste'] =$data[$i]['scenariste'];
-                            $_SESSION['producteur'] = $data[$i]['producteur'];
-                            $_SESSION['date_sortie'] = $data[$i]['date_sortie'];
-                            $_SESSION['quantite'] = $data[$i]['quantite'];
-                            $_SESSION['lien_image'] = $data[$i]['image_dvd'];
-                        }
+            for($i = 0;$i < $nbr ;$i++)
+            {
+                //print "<br>".$data[$i]['titre'];
+                $_SESSION['id_dvd'] = $data[$i]['id_dvd'];
+                $_SESSION['titre'] = $data[$i]['titre'];
+                $_SESSION['realisateur'] = $data[$i]['realisateur'];
+                $_SESSION['scenariste'] =$data[$i]['scenariste'];
+                $_SESSION['producteur'] = $data[$i]['producteur'];
+                $_SESSION['date_sortie'] = $data[$i]['date_sortie'];
+                $_SESSION['quantite'] = $data[$i]['quantite'];
+                $_SESSION['lien_image'] = $data[$i]['image_dvd'];
+            }
         ?>
             
             <form action="index.php?page=administrateur/modifierDVD.php" method="POST" class="form-horizontal cadre">
@@ -184,21 +160,21 @@
                     </div>
                 </div>
                 <div class="form-group">
-                  <label class="control-label col-sm-2 evidence" for="dateSortie">Date de sortie :</label>
+                  <label class="control-label col-sm-2 evidence" for="date_sortie">Date de sortie :</label>
                   <div class="col-sm-10">
-                      <input type="date" class="form-control" id="dateSortie" name="dateSortie" value="<?php echo $_SESSION['date_sortie']; ?>">
+                      <input type="date" class="form-control" id="date_sortie" name="date_sortie" value="<?php echo $_SESSION['date_sortie']; ?>">
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="control-label col-sm-2 evidence" for="nbre">Nombre de DVD disponibles :</label>
+                  <label class="control-label col-sm-2 evidence" for="quantite">Nombre de DVD disponibles :</label>
                   <div class="col-sm-10"> 
-                      <input type="number" class="form-control" id="nbre" name="nbre" value="<?php echo $_SESSION['quantite']; ?>">
+                      <input type="number" class="form-control" id="quantite" name="quantite" value="<?php echo $_SESSION['quantite']; ?>">
                   </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-sm-2 evidence" for="image">Image associé :</label>
+                    <label class="control-label col-sm-2 evidence" for="image_dvd">Image associé :</label>
                     <div class="col-sm-10"> 
-                        <input type="text" class="form-control" id="image" name="image" value="<?php echo $_SESSION['lien_image']; ?>">
+                        <input type="text" class="form-control" id="image_dvd" name="image_dvd" value="<?php echo $_SESSION['lien_image']; ?>">
                     </div>
                 </div>
                 <div class="form-group">

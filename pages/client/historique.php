@@ -1,5 +1,5 @@
 <?php
-    if(isset($_SESSION['connexion']))
+    if(isset($_SESSION['connexionClient']))
     {
 ?>
 <nav class="menu">
@@ -94,7 +94,7 @@
                         }
                         else
                         {
-                            echo '<p class="deeppink">plus de films disponibles</p>';
+                            echo '<p class="deeppink">Vous ne louez actuellement aucun DVD</p>';
                         }
                     ?>
         </table>

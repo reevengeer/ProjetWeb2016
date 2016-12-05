@@ -1,5 +1,5 @@
 <?php
-    if(isset($_SESSION['connexion']))
+    if(isset($_SESSION['connexionAdministrateur']))
     {
 ?>
 <nav class="menu">
@@ -22,55 +22,51 @@
         {
             ?><br/><?php
             $DvdChoisi = $_POST['film']; // correspond à l'id du dvd choisi
-            $query="select * from dvd where id_dvd=".$DvdChoisi;
-
-                        $resultset = $cnx->prepare($query);
-
-                        $resultset->execute();
-                        $data = $resultset->fetchAll();
-
-                        $nbr= count($data);
-
-                        for($i = 0;$i < $nbr ;$i++)
-                        {
-                            $_SESSION['id_dvd'] = $data[$i]['id_dvd'];
-                            $_SESSION['titre'] = $data[$i]['titre'];
-                            $_SESSION['realisateur'] = $data[$i]['realisateur'];
-                        }
                         
-                        $query="select delete_dvd(:id_dvd)";
-                        $resultset = $cnx->prepare($query);
+            $log = new dvdBD($cnx);
+            $data=$log->informationsDVDDEpuisSonID($DvdChoisi);
 
-                        $resultset -> bindValue(1,$_SESSION['id_dvd']);
+            $nbr= count($data);
 
-                        $resultset->execute();
-
-                        $retour = $resultset->fetchColumn(0);
-
-                        if($retour=='DVD supprimé')
-                        {
-                            ?>
-                            <p class="deeppink grand">
-                                <?php
-                                    print 'Le film ';
-                                    print_r($_SESSION['titre']);
-                                    print ' a bien été supprimé de la base de données.';
-                                ?>
-                            </p><br/>
-                            <?php
-                        }
-                        else if ($retour!='DVD supprimé')
-                        {
-                            ?>
-                            <p class="deeppink grand">Un problème est intervenue.</p>
-                            <p class="deeppink">Le DVD en question est actuellement en location.</p>
-                            <br/>
-                            <?php
-                        }
+            for($i = 0;$i < $nbr ;$i++)
+            {
+                //print "<br>".$data[$i]['titre'];
+                $_SESSION['id_dvd'] = $data[$i]['id_dvd'];
+                $_SESSION['titre'] = $data[$i]['titre'];
+                $_SESSION['realisateur'] = $data[$i]['realisateur'];
+                $_SESSION['scenariste'] =$data[$i]['scenariste'];
+                $_SESSION['producteur'] = $data[$i]['producteur'];
+                $_SESSION['date_sortie'] = $data[$i]['date_sortie'];
+                $_SESSION['quantite'] = $data[$i]['quantite'];
+                $_SESSION['lien_image'] = $data[$i]['image_dvd'];
+            }
+                        
+            $retour=$log->supprimerDVD($_SESSION['id_dvd']);
+            if($retour=='DVD supprimé')
+            {
+            ?>
+                <p class="deeppink grand">
+                <?php
+                    print 'Le film ';
+                    print_r($_SESSION['titre']);
+                    print ' a bien été supprimé de la base de données.';
+                ?>
+                </p><br/>
+            <?php
+            }
+            else if ($retour!='DVD supprimé')
+            {
+            ?>
+                <p class="deeppink grand">Un problème est intervenue.</p>
+                <p class="deeppink">Le DVD en question est actuellement en location.</p>
+                <br/>
+                <?php
+            }
         }
-        ?>
+    ?>
     <h2 class='evidence'>Veuillez choisir le DVD à supprimer de la bse de données</h2>
-    <div class="container largeur">
+    <div cla
+         ss="container largeur">
         <div class="table table-bordered">  
             
                 <form action="index.php?page=administrateur/supprimerDVD.php" method="POST" class="form-horizontal cadre">
@@ -78,12 +74,8 @@
                     <label class="control-label col-sm-3 evidence" for="titre">DVD à supprimer :</label>
                     <div class="col-sm-9">
                     <?php            
-                        $query="select * from dvd";
-
-                        $resultset = $cnx->prepare($query);
-
-                        $resultset->execute();
-                        $data = $resultset->fetchAll();
+                        $log = new dvdBD($cnx);
+                        $data=$log->tousLesDVD();
 
                         $nbr= count($data);
 

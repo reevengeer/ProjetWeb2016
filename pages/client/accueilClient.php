@@ -1,5 +1,5 @@
 <?php
-    if(isset($_SESSION['connexion']))
+    if(isset($_SESSION['connexionClient']))
     {
 ?>
 <nav class="menu">

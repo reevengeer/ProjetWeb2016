@@ -1,5 +1,5 @@
 <?php
-    if(isset($_SESSION['connexion']))
+    if(isset($_SESSION['connexionAdministrateur']))
     {
 ?>
 <nav class="menu">
@@ -24,29 +24,12 @@
             {
                 ?><br/><?php
 		if($_POST['titre']!="" && $_POST['realisateur']!=""&& $_POST['scenariste']!=""&& $_POST['producteur']!=""
-                        && $_POST['dateSortie']!=""&& $_POST['nbre']!=""&& $_POST['image']!="")
+                        && $_POST['date_sortie']!=""&& $_POST['quantite']!=""&& $_POST['image_dvd']!="")
 		{
-                    if($_POST['nbre']>=1)
+                    if($_POST['quantite']>=1)
                     {
-                        //print 'ok';
-                        
-			$flag=1;
-			$query="select insert_dvd(:id_administrateur,:titre,:realisateur,:scenariste,:producteur,:date_sortie,:quantite,:image_dvd,:description)";
-                        $resultset = $cnx->prepare($query);
-
-                        $resultset -> bindValue(1,$_SESSION['id_administrateur']);
-                        $resultset -> bindValue(2,$_POST['titre']); 
-                        $resultset -> bindValue(3,$_POST['realisateur']); 
-                        $resultset -> bindValue(4,$_POST['scenariste']);
-                        $resultset -> bindValue(5,$_POST['producteur']);
-                        $resultset -> bindValue(6,$_POST['dateSortie']); 
-                        $resultset -> bindValue(7,$_POST['nbre']);
-                        $resultset -> bindValue(8,$_POST['image']);
-                        $resultset -> bindValue(9,$_POST['description']);
-
-                        $resultset->execute();
-
-                        $retour = $resultset->fetchColumn(0);
+                        $log = new dvdBD($cnx);
+                        $retour=$log->ajoutDVD($_SESSION['id_administrateur'],$_POST['titre'],$_POST['realisateur'],$_POST['scenariste'],$_POST['producteur'],$_POST['date_sortie'],$_POST['quantite'],$_POST['image_dvd'],$_POST['description']);
 
                         if($retour=='Le DVD a été ajouté')
                         {
@@ -122,21 +105,21 @@
                     </div>
                 </div>
                 <div class="form-group">
-                  <label class="control-label col-sm-2 evidence" for="dateSortie">Date de sortie :</label>
+                  <label class="control-label col-sm-2 evidence" for="date_sortie">Date de sortie :</label>
                   <div class="col-sm-10">
-                      <input type="date" class="form-control" id="dateSortie" name="dateSortie" placeholder="Sa date de sortie">
+                      <input type="date" class="form-control" id="date_sortie" name="date_sortie" placeholder="Sa date de sortie">
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="control-label col-sm-2 evidence" for="nbre">Nombre de DVD disponibles :</label>
+                  <label class="control-label col-sm-2 evidence" for="quantite">Nombre de DVD disponibles :</label>
                   <div class="col-sm-10"> 
-                      <input type="number" class="form-control" id="nbre" name="nbre" placeholder="Entrez la quantité de DVD disponibles">
+                      <input type="number" class="form-control" id="quantite" name="quantite" placeholder="Entrez la quantité de DVD disponibles">
                   </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-sm-2 evidence" for="image">Image associé :</label>
+                    <label class="control-label col-sm-2 evidence" for="image_dvd">Image associé :</label>
                     <div class="col-sm-10"> 
-                        <input type="text" class="form-control" id="image" name="image" placeholder="nom de l'image avec son extension préalablement enregistrés dans le dossier images">
+                        <input type="text" class="form-control" id="image_dvd" name="image_dvd" placeholder="nom de l'image avec son extension préalablement enregistrés dans le dossier images">
                     </div>
                 </div>
                 <div class="form-group">

@@ -1,5 +1,5 @@
 <?php
-    if(isset($_SESSION['connexion']))
+    if(isset($_SESSION['connexionClient']))
     {
 ?>
 <nav class="menu">
@@ -25,12 +25,9 @@
                     if(isset($_POST['choix']))
                     {
                         $DvdChoisi = $_POST['film']; // correspond à l'id du dvd choisi
-                        $query="select * from dvd where id_dvd=".$DvdChoisi;
-
-                        $resultset = $cnx->prepare($query);
-
-                        $resultset->execute();
-                        $data = $resultset->fetchAll();
+                        
+                        $log = new dvdBD($cnx);
+                        $data=$log->informationsDVDDEpuisSonID($DvdChoisi);
 
                         $nbr= count($data);
 
@@ -44,50 +41,52 @@
                             $_SESSION['producteur'] = $data[$i]['producteur'];
                             $_SESSION['date_sortie'] = $data[$i]['date_sortie'];
                             $_SESSION['quantite'] = $data[$i]['quantite'];
-                            $_SESSION['lien_image'] = $data[$i]['image_dvd'];
+                            $_SESSION['image_dvd'] = $data[$i]['image_dvd'];
                             $_SESSION['description'] = $data[$i]['description'];
                         }
                         if($_SESSION['quantite']>0)
                         {
                             $datetime = date("Y-m-d");
                             
-                            $newQuantite = $_SESSION['quantite']-1;
-                            
-                            $query="select insert_historique(:id_client,:id_dvd,:nom_client,:titre_film,:date_location,:duree)";
-                            $resultset = $cnx->prepare($query);
-                            
-                            $resultset -> bindValue(1,$_SESSION['id_client']);
-                            $resultset -> bindValue(2,$_SESSION['id_dvd']); 
-                            $resultset -> bindValue(3,$_SESSION['nom']); 
-                            $resultset -> bindValue(4,$_SESSION['titre']);
-                            $resultset -> bindValue(5,$datetime);
-                            $resultset -> bindValue(6,$_POST['choix']); 
-                         
-                            $resultset->execute();
-                           
-                            $retour = $resultset->fetchColumn(0);
+                            $log = new historiqueBD($cnx);
+                            $retour=$log->enregistrementLocation($_SESSION['id_client'],$_SESSION['id_dvd'],$_SESSION['nom'],$_SESSION['titre'],$datetime,$_POST['choix']);
                             
                             if($retour=='Historique complété')
-                            {                                                                               
-                                        $newQuantite = $_SESSION['quantite']-1;
-                                        
-                                        $query2="select update_dvd(:id_dvd,:titre,:realisateur,:scenariste,:producteur,:date_sortie,:quantite,:image_dvd,:description)";
-                                        
-                                        $resultset2 = $cnx->prepare($query2);
+                            {                     
+                                
+                                // incrémentation de la réduction jusqu'à une réduction de maximum 15%
+                                $log3 = new clientBD($cnx);
+                                $data3=$log3->rechercheClientSurSonID($_SESSION['id_client']);
 
-                                        $resultset2 -> bindValue(1,$_SESSION['id_dvd']);
-                                        $resultset2 -> bindValue(2,$_SESSION['titre']); 
-                                        $resultset2 -> bindValue(3,$_SESSION['realisateur']); 
-                                        $resultset2 -> bindValue(4,$_SESSION['scenariste']);
-                                        $resultset2 -> bindValue(5,$_SESSION['producteur']);
-                                        $resultset2 -> bindValue(6,$_SESSION['date_sortie']); 
-                                        $resultset2 -> bindValue(7,$newQuantite);
-                                        $resultset2 -> bindValue(8,$_SESSION['lien_image']);
-                                        $resultset2 -> bindValue(9,$_SESSION['description']);
-                                        
-                                        $resultset2->execute();
+                                $nbr3= count($data3);
 
-                                        $retour2 = $resultset2->fetchColumn(0);
+                                for($i = 0;$i < $nbr3 ;$i++)
+                                {
+                                    $_SESSION['reduction'] = $data3[$i]['reduction'];
+                                }
+                                
+                                if($_SESSION['reduction']<15)
+                                {
+                                    $log3->updateReduction($_SESSION['id_client']);
+                                    $data3=$log3->rechercheClientSurSonID($_SESSION['id_client']);
+                                    
+                                    $nbr3= count($data3);
+
+                                    for($i = 0;$i < $nbr3 ;$i++)
+                                    {
+                                        $_SESSION['reduction'] = $data3[$i]['reduction'];
+                                    }
+                                }
+                                else
+                                {
+                                    $reductionAccordee = $_SESSION['reduction'];
+                                }
+                                ///////////////////////////////////////////////
+                                
+                                $_SESSION['quantite'] = $_SESSION['quantite']-1;
+                                
+                                $log = new dvdBD($cnx);
+                                $retour2=$log->updateDVD($_SESSION['id_dvd'],$_SESSION['titre'],$_SESSION['realisateur'],$_SESSION['scenariste'],$_SESSION['producteur'],$_SESSION['date_sortie'],$_SESSION['quantite'],$_SESSION['image_dvd'],$_SESSION['description']);
 
                                         if($retour2=='DVD mis à jour')
                                         {
@@ -177,12 +176,8 @@
                                 </td>
                                 <td>
                                     <?php            
-                                        $query="select * from dvd where quantite>0";
-
-                                        $resultset = $cnx->prepare($query);
-
-                                        $resultset->execute();
-                                        $data = $resultset->fetchAll();
+                                        $log = new dvdBD($cnx);
+                                        $data=$log->DVDAvecQuantiteSuperieurAZero();
 
                                         $nbr= count($data);
 

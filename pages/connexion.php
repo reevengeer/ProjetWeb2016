@@ -59,16 +59,11 @@
             {
 		if($_POST['Identifiant']!="" && $_POST['mdp']!="")
 		{
-                    $flag=1;
-                    //$query = $cnx->prepare("SELECT * FROM CLIENT WHERE login='".$_POST["Identifiant"]."' AND password='".$_POST["mdp"]."'");
-                    $query = "select * from client where login='".$_POST["Identifiant"]."' AND password='".$_POST["mdp"]."'";
-
-                    $resultset = $cnx->prepare($query);
-
-                    $resultset->execute();
-                    $data = $resultset->fetchAll();
-
+                    $log = new clientBD($cnx);
+                    $data=$log->connexionClient($_POST['Identifiant'],$_POST['mdp']);
+                        
                     $nbr= count($data);
+                        
                     for($i = 0;$i < $nbr ;$i++)
                     {
                         //print "<br>".$data[$i]['nom'];
@@ -81,7 +76,7 @@
                         $_SESSION['login'] = $data[$i]['login'];
                         $_SESSION['password'] = $data[$i]['password'];
                         
-                        $_SESSION['connexion']='valide';
+                        $_SESSION['connexionClient']='valide';
                     }
                     if (count($data)!=0)
                     {
@@ -89,14 +84,11 @@
                     }
                     else if (count($data)==0)
                     {
-                        $query = "select * from Administrateur where login='".$_POST["Identifiant"]."' AND password='".$_POST["mdp"]."'";
-
-                        $resultset = $cnx->prepare($query);
-
-                        $resultset->execute();
-                        $data = $resultset->fetchAll();
-
+                        $log = new administrateurBD($cnx);
+                        $data=$log->connexionAdministrateur($_POST['Identifiant'],$_POST['mdp']);
+                        
                         $nbr= count($data);
+                        
                         for($i = 0;$i < $nbr ;$i++)
                         {
                             //print "<br>".$data[$i]['nom'];
@@ -109,7 +101,7 @@
                             $_SESSION['login'] = $data[$i]['login'];
                             $_SESSION['password'] = $data[$i]['password'];
                             
-                            $_SESSION['connexion']='valide';
+                            $_SESSION['connexionAdministrateur']='valide';
                         }
                         if (count($data)!=0)
                         {
@@ -121,7 +113,7 @@
                             <p class="deeppink grand">Personne ne correspond aux valeurs entrées.</p>
                            <?php
                         }
-                     }
+                    }
                 }
             else
             {

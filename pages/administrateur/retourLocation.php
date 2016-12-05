@@ -1,5 +1,5 @@
 <?php
-    if(isset($_SESSION['connexion']))
+    if(isset($_SESSION['connexionAdministrateur']))
     {
 ?>
 <nav class="menu">
@@ -27,42 +27,26 @@
             {
 		if(isset($_POST['choix']))
 		{
-                        $DvdChoisi = $_POST['film']; // correspond à l'id du dvd choisi
-                        $query3="select * from historique where id_dvd=".$_POST['film']." and id_client=".$_POST['client'];
+                        $log = new historiqueBD($cnx);
+                        $data1=$log->historiqueDVDClient($_POST['film'],$_POST['client']);
 
-                        $resultset3 = $cnx->prepare($query3);
-
-                        $resultset3->execute();
-                        $data = $resultset3->fetchAll();
-
-                        $nbr= count($data);
+                        $nbr= count($data1);
 
                         for($i = 0;$i < $nbr ;$i++)
                         {
                             //print "<br>".$data[$i]['titre'];
-                            $_SESSION['duree'] = $data[$i]['duree'];
+                            $_SESSION['duree'] = $data1[$i]['duree'];
+                            // pour recuperer la duree du film choisit
                         }
 
                         //-----------------------------------------------------
                         
-			$query="select delete_historique(:id_client,:id_dvd)";
-                        $resultset = $cnx->prepare($query);
-
-                        $resultset -> bindValue(1,$_POST['client']);
-                        $resultset -> bindValue(2,$_POST['film']); 
-                        
-                        $resultset->execute();
-
-                        $retour = $resultset->fetchColumn(0);
+                        $retour=$log->deleteHistorique($_POST['client'],$_POST['film']);
                         
                         //------------------------------------------------------
                         
-                        $query2="select * from dvd where id_dvd=".$DvdChoisi;
-
-                        $resultset2 = $cnx->prepare($query2);
-
-                        $resultset2->execute();
-                        $data = $resultset2->fetchAll();
+                        $log2 = new dvdBD($cnx);
+                        $data=$log2->informationsDVDDEpuisSonID($_POST['film']);
 
                         $nbr= count($data);
 
@@ -76,40 +60,37 @@
                             $_SESSION['producteur'] = $data[$i]['producteur'];
                             $_SESSION['date_sortie'] = $data[$i]['date_sortie'];
                             $_SESSION['quantite'] = $data[$i]['quantite'];
-                            $_SESSION['lien_image'] = $data[$i]['image_dvd'];
+                            $_SESSION['image_dvd'] = $data[$i]['image_dvd'];
                             $_SESSION['description'] = $data[$i]['description'];
                         }
 
                         if($retour=='Ligne supprimé')
                         {
-                            $newQuantite = $_SESSION['quantite']+1;
+                            $_SESSION['quantite'] = $_SESSION['quantite']+1;
                                         
-                            $query2="select update_dvd(:id_dvd,:titre,:realisateur,:scenariste,:producteur,:date_sortie,:quantite,:image_dvd,:description)";
-                                        
-                            $resultset2 = $cnx->prepare($query2);
-
-                            $resultset2 -> bindValue(1,$_SESSION['id_dvd']);
-                            $resultset2 -> bindValue(2,$_SESSION['titre']); 
-                            $resultset2 -> bindValue(3,$_SESSION['realisateur']); 
-                            $resultset2 -> bindValue(4,$_SESSION['scenariste']);
-                            $resultset2 -> bindValue(5,$_SESSION['producteur']);
-                            $resultset2 -> bindValue(6,$_SESSION['date_sortie']); 
-                            $resultset2 -> bindValue(7,$newQuantite);
-                            $resultset2 -> bindValue(8,$_SESSION['lien_image']);
-                            $resultset2 -> bindValue(9,$_SESSION['description']);
-                                        
-                            $resultset2->execute();
-
-                            $retour2 = $resultset2->fetchColumn(0);
+                            $retour2=$log2->updateDVD($_SESSION['id_dvd'],$_SESSION['titre'],$_SESSION['realisateur'],$_SESSION['scenariste'],$_SESSION['producteur'],$_SESSION['date_sortie'],$_SESSION['quantite'],$_SESSION['image_dvd'],$_SESSION['description']);
 
                             if($retour2=='DVD mis à jour')
                             {
                             ?>
                                 <p class="deeppink grand souligner">
                             <?php
-                                 print 'Base de données mise à jour';
-                                 $montant = 0;
+                                print 'Base de données mise à jour';
+                                $montant = 0;
                                  
+                                $log3 = new clientBD($cnx);
+                                $_SESSION['id_client']=$_POST['client'];
+                                $data3=$log3->rechercheClientSurSonID($_SESSION['id_client']);
+
+                                $nbr3= count($data3);
+
+                                for($i = 0;$i < $nbr3 ;$i++)
+                                {
+                                    $_SESSION['reduction'] = $data3[$i]['reduction'];
+                                }
+                                
+                                $reductionAccordee = $_SESSION['reduction'];
+                        
                                  // je calcule le montant totale que le client devra payer mais le paiement en lui
                                  // même se faira sur un autre site plus sécurisé tel que paypal ou autre
                                  // qui peuvent gérer les paiements des sites en ligne                             
@@ -118,19 +99,19 @@
                                  {
                                     if($_SESSION['duree']=='1 à 2 jours                     ')
                                     {
-                                       $montant= 8+2; // 8 euros de base lors d'une pénalité sans la durée
+                                       $montant= ((3+2)/100*(100-$reductionAccordee))+5; // 8 euros de base lors d'une pénalité sans la durée
                                        $message="Le client vous doit : ".$montant." euros.";
                                        echo '<script type="text/javascript">window.alert("'.$message.'");</script>';
                                     }
                                     else if($_SESSION['duree']=='3 à 5 jours                     ')
                                     {
-                                       $montant= 8+3;
+                                       $montant= ((3+3)/100*(100-$reductionAccordee))+5;
                                        $message="Le client vous doit : ".$montant." euros.";
                                        echo '<script type="text/javascript">window.alert("'.$message.'");</script>';
                                     }
                                     else if($_SESSION['duree']=='1 semaine                       ')
                                     {
-                                       $montant= 8+4;
+                                       $montant= ((3+4)/100*(100-$reductionAccordee))+5;
                                        $message="Le client vous doit : ".$montant." euros.";
                                        echo '<script type="text/javascript">window.alert("'.$message.'");</script>';
                                     }
@@ -143,19 +124,19 @@
                                  {
                                     if($_SESSION['duree']=='1 à 2 jours                     ')
                                     {
-                                       $montant= 3+2; // 3 euros de base lors sans pénalité et sans la durée
+                                       $montant= (3+2)/100*(100-$reductionAccordee); // 3 euros de base lors sans pénalité et sans la durée
                                        $message="Le client vous doit : ".$montant." euros.";
                                        echo '<script type="text/javascript">window.alert("'.$message.'");</script>';
                                     }
                                     else if($_SESSION['duree']=='3 à 5 jours                     ')
                                     {
-                                       $montant= 3+3;
+                                       $montant= (3+3)/100*(100-$reductionAccordee);
                                        $message="Le client vous doit : ".$montant." euros.";
                                        echo '<script type="text/javascript">window.alert("'.$message.'");</script>';
                                     }
                                     else if($_SESSION['duree']=='1 semaine                       ')
                                     {
-                                       $montant= 3+4;
+                                       $montant= (3+4)/100*(100-$reductionAccordee);
                                        $message="Le client vous doit : ".$montant." euros.";
                                        echo '<script type="text/javascript">window.alert("'.$message.'");</script>';
                                     }
@@ -213,12 +194,8 @@
                                     </td>
                                     <td class="legerement_a_droite">
                                         <?php            
-                                            $query="select * from historique";
-
-                                            $resultset = $cnx->prepare($query);
-
-                                            $resultset->execute();
-                                            $data = $resultset->fetchAll();
+                                            $log = new historiqueBD($cnx);
+                                            $data=$log->toutLHistorique();
 
                                             $nbr= count($data);
 
@@ -246,12 +223,8 @@
                                     </td>
                                     <td class="legerement_a_droite">
                                         <?php            
-                                            $query="select * from historique,client where client.id_client=historique.id_client";
-                                            // distinct ne fonctionne pas en postgreSQL
-                                            $resultset = $cnx->prepare($query);
-
-                                            $resultset->execute();
-                                            $data = $resultset->fetchAll();
+                                            $log = new historiqueBD($cnx);
+                                            $data=$log->clientHistorique();
 
                                             $nbr= count($data);
 
@@ -385,7 +358,7 @@
                             }
                             else
                             {
-                                echo '<p class="deeppink">plus de films disponibles</p>';
+                                echo '<p class="deeppink">Aucun DVD e location actuellement</p>';
                             }
                         ?>
                 </table>
