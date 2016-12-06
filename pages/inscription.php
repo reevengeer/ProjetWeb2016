@@ -80,41 +80,78 @@
                         && $_POST['Identifiant']!=""&& $_POST['mdp']!=""&& $_POST['mdp2']!="")
 		{
                     if($_POST['mdp']==$_POST['mdp2'])
-                    {
-			$log = new clientBD($cnx);
-                        $retour=$log->inscription($_POST['nom'],$_POST['prenom'],$_POST['ville'],$_POST['adresse'],$_POST['Identifiant'],$_POST['mdp']);
-                        
-                        if($retour=='Le client a été ajouté')
+                    {                        
+                        if(preg_match("#[a-zA-Z -]+#",$_POST['nom']) == true )
                         {
-                            $log = new clientBD($cnx);
-                            $data=$log->connexionClient($_POST['Identifiant'],$_POST['mdp']);
-
-                            $nbr= count($data);
-                            for($i = 0;$i < $nbr ;$i++)
+                            if(preg_match("#[a-zA-Z -]+#",$_POST['prenom']) == true )
                             {
-                                //print "<br>".$data[$i]['nom'];
-                                $_SESSION['id_client'] = $data[$i]['id_client'];
-                                $_SESSION['nom'] = $data[$i]['nom'];
-                                $_SESSION['prenom'] =$data[$i]['prenom'];
-                                $_SESSION['reduction'] = $data[$i]['reduction'];
-                                $_SESSION['ville'] = $data[$i]['ville'];
-                                $_SESSION['adresse'] = $data[$i]['adresse'];
-                                $_SESSION['login'] = $data[$i]['login'];
-                                $_SESSION['password'] = $data[$i]['password'];
-                                
-                                $_SESSION['connexion']='valide';
-                            }
+                                if(preg_match("#[A-Z -][a-z -]*#",$_POST['ville']) == true )
+                                {
+                                    if(preg_match("#[0-9]+ rue [a-zA-Z -]*#",$_POST['adresse']) == true )
+                                    {
+                                        $log = new clientBD($cnx);
+                                        $retour=$log->inscription($_POST['nom'],$_POST['prenom'],$_POST['ville'],$_POST['adresse'],$_POST['Identifiant'],$_POST['mdp']);
 
-                            //print 'ok';
-                            //print $_SESSION['connexion'];
-                            header('Location: index.php?page=client/accueilClient.php'); 
+                                        if($retour=='Le client a été ajouté')
+                                        {
+                                            $log = new clientBD($cnx);
+                                            $data=$log->connexionClient($_POST['Identifiant'],$_POST['mdp']);
+
+                                            $nbr= count($data);
+                                            for($i = 0;$i < $nbr ;$i++)
+                                            {
+                                                //print "<br>".$data[$i]['nom'];
+                                                $_SESSION['id_client'] = $data[$i]['id_client'];
+                                                $_SESSION['nom'] = $data[$i]['nom'];
+                                                $_SESSION['prenom'] =$data[$i]['prenom'];
+                                                $_SESSION['reduction'] = $data[$i]['reduction'];
+                                                $_SESSION['ville'] = $data[$i]['ville'];
+                                                $_SESSION['adresse'] = $data[$i]['adresse'];
+                                                $_SESSION['login'] = $data[$i]['login'];
+                                                $_SESSION['password'] = $data[$i]['password'];
+
+                                                $_SESSION['connexionClient']='valide';
+                                            }
+
+                                            //print 'ok';
+                                            //print $_SESSION['connexion'];
+                                            header('Location: index.php?page=client/accueilClient.php'); 
+                                        }
+                                        else if ($retour!='Le client a été ajouté')
+                                        {
+                                            ?>
+                                            <p class="deeppink grand souligner">Un problème est intervenue.</p>
+                                            <p class="deeppink centre grand">1.Le informations entrées doivent correspondre à celle d'un autre client</p>
+                                            <p class="deeppink centre grand">2.Cet identifiant est déjà utilisé par un autre client</p>
+                                            <?php
+                                        }
+                                    }
+                                    else
+                                    {
+                                        echo '<p class="deeppink centre grand">Nom/prénom/ville doivent être composé uniquement de lettres</p>';
+                                        echo '<p class="deeppink centre grand">Le nom de votre ville doit commencer par une majuscule</p>';
+                                        echo '<p class="deeppink centre grand">Votre adresse doit être au format : 123 rue des soleils</p>';
+                                    }
+                                }
+                                else
+                                {
+                                    echo '<p class="deeppink centre grand">Nom/prénom/ville doivent être composé uniquement de lettres</p>';
+                                    echo '<p class="deeppink centre grand">Le nom de votre ville doit commencer par une majuscule</p>';
+                                    echo '<p class="deeppink centre grand">Votre adresse doit être au format : 123 rue des soleils</p>';
+                                }
+                            }
+                            else
+                            {
+                                echo '<p class="deeppink centre grand">Nom/prénom/ville doivent être composé uniquement de lettres</p>';
+                                echo '<p class="deeppink centre grand">Le nom de votre ville doit commencer par une majuscule</p>';
+                                echo '<p class="deeppink centre grand">Votre adresse doit être au format : 123 rue des soleils</p>';
+                            }
                         }
-                        else if ($retour!='Le client a été ajouté')
+                        else
                         {
-                            ?>
-                            <p>Un problème est intervenue.</p>
-                            <p>Le informations entrées doivent correspondre à celle d'un autre client.</p>
-                            <?php
+                            echo '<p class="deeppink centre grand">Bom/prénom/ville doivent être composé uniquement de lettres</p>';
+                            echo '<p class="deeppink centre grand">Le nom de votre ville doit commencer par une majuscule</p>';
+                            echo '<p class="deeppink centre grand">Votre adresse doit être au format : 123 rue des soleils</p>';
                         }
                     }
                     else

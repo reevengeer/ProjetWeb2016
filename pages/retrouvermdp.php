@@ -45,7 +45,13 @@
             if(isset($_POST['Confirmer']))
             {
 		if($_POST['Identifiant']!="" && $_POST['nom']!="" && $_POST['prenom']!="" && $_POST['ville']!="")
-		{
+		{ 
+                    // pas de regex ici puisque cette partie concerne l'utilisateur et l'administrateur.
+                    // Puisque l'administrateur doit entrer manuellement ses informations dans la base de données
+                    // je ne peux l'obliger à respecter un certains regex pour les infos qu'il y rentrera
+                    // sous peine de ne jamais lui permettre de retrouver son mdp si il n'a pas suivi les meme regex que
+                    // l'utilisateur
+                    
                     $log = new clientBD($cnx);
                     $data=$log->retrouverMDPClient($_POST['Identifiant'],$_POST['nom'],$_POST['prenom'],$_POST['ville']);
                         

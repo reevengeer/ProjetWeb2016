@@ -31,13 +31,20 @@
                         $data1=$log->historiqueDVDClient($_POST['film'],$_POST['client']);
 
                         $nbr= count($data1);
-
+                        $flag=0;
                         for($i = 0;$i < $nbr ;$i++)
                         {
                             //print "<br>".$data[$i]['titre'];
                             $_SESSION['duree'] = $data1[$i]['duree'];
                             // pour recuperer la duree du film choisit
+                            $flag=1;
                         }
+                        if($flag==0)
+                        {
+                            echo '<p class="deeppink centre grand">La combinaison client/DVD ne correspond pas</p>';
+                        }
+                        else
+                        {
 
                         //-----------------------------------------------------
                         
@@ -164,11 +171,18 @@
 		else
 		{
                	    ?>
-                        <p class="evidence grand">Vous devez préciser  pour un éventuel retard.</p>
+                        <p class="evidence grand">Un problème lors de la suppression est intervenu</p>
                      <?php
 		}
             }
         }
+        else
+        {
+            ?>
+            <p class="evidence grand">Vous devez cocher une case</p>
+            <?php
+        }
+    }
     ?>
     <div class="container-fluid">
         <div class="row">
@@ -255,7 +269,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <label class="evidence">Retard éventuel (obligatoire):</label>
+                                                <label class="evidence">Retard éventuel (obligatoire)</label>
                                             </td>
                                         </tr>
                                         <tr>

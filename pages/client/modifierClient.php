@@ -30,28 +30,46 @@
                 {
                     if($_POST['ville']!=""&& $_POST['adresse']!=""&& $_POST['login']!=""&& $_POST['password']!=""&& $_POST['password']==$_POST['mdp2'])
                     {
-                        $log = new clientBD($cnx);
-                        $retour=$log->modifierClient($_SESSION['nom'],$_SESSION['prenom'],$_POST['ville'],$_POST['adresse'],$_POST['login'],$_POST['password']);
+                        if(preg_match("#[A-Z -][a-z -]*#",$_POST['ville']) == true )
+                        {
+                            if(preg_match("#[0-9]+ rue [a-zA-Z -]*#",$_POST['adresse']) == true )
+                            {
+                                $log = new clientBD($cnx);
+                                $retour=$log->modifierClient($_SESSION['nom'],$_SESSION['prenom'],$_POST['ville'],$_POST['adresse'],$_POST['login'],$_POST['password']);
 
-                            if($retour=='Client mis à jour')
-                            {
-                                $_SESSION['ville']=$_POST['ville'];
-                                $_SESSION['adresse']=$_POST['adresse'];
-                                $_SESSION['login']=$_POST['login'];
-                                
-                                ?>
-                                <p class="deeppink grand souligner">
-                                    <?php
-                                        print 'Vos informations ont bien été mis à jour dans la base de données.';
-                                    ?>
-                                </p>
-                                <?php
+                                    if($retour=='Client mis à jour')
+                                    {
+                                        $_SESSION['ville']=$_POST['ville'];
+                                        $_SESSION['adresse']=$_POST['adresse'];
+                                        $_SESSION['login']=$_POST['login'];
+
+                                        ?>
+                                        <p class="deeppink grand souligner">
+                                            <?php
+                                                print 'Vos informations ont bien été mis à jour dans la base de données.';
+                                            ?>
+                                        </p>
+                                        <?php
+                                    }
+                                    else if ($retour!='Client mis à jour')
+                                    {
+                                        ?>
+                                        <p class="deeppink grand souligner">Un problème est intervenue.</p>
+                                        <p class="deeppink centre grand">1.Le informations entrées doivent correspondre à celle d'un autre client</p>
+                                        <p class="deeppink centre grand">2.Cet identifiant est déjà utilisé par un autre client</p>
+                                        <?php
+                                    }
+                                }
+                                else
+                                {
+                                    echo '<p class="deeppink centre grand">Le nom de votre ville doit être composé de lettres et commencer par une majuscule</p>';
+                                    echo '<p class="deeppink centre grand">Votre adresse doit être au format : 123 rue des soleils</p>';
+                                }
                             }
-                            else if ($retour!='Client mis à jour')
+                            else
                             {
-                                ?>
-                                <p class="deeppink grand">Un problème est intervenue.</p>
-                                <?php
+                                echo '<p class="deeppink centre grand">Le nom de votre ville doit être composé de lettres et commencer par une majuscule</p>';
+                                echo '<p class="deeppink centre grand">Votre adresse doit être au format : 123 rue des soleils</p>';
                             }
                     }
                     else

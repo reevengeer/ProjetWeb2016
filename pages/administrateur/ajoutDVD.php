@@ -28,30 +28,58 @@
 		{
                     if($_POST['quantite']>=1)
                     {
-                        $log = new dvdBD($cnx);
-                        $retour=$log->ajoutDVD($_SESSION['id_administrateur'],$_POST['titre'],$_POST['realisateur'],$_POST['scenariste'],$_POST['producteur'],$_POST['date_sortie'],$_POST['quantite'],$_POST['image_dvd'],$_POST['description']);
+                        if(preg_match("#[A-Z -][A-Za-z -]+#",$_POST['realisateur']) == true )
+                        {
+                            if(preg_match("#[A-Z -][A-Za-z -]+#",$_POST['scenariste']) == true )
+                            {
+                                if(preg_match("#image[0-9]*\.[a-z]+#",$_POST['image_dvd']) == true )
+                                {
+                                    $log = new dvdBD($cnx);
+                                    $retour=$log->ajoutDVD($_SESSION['id_administrateur'],$_POST['titre'],$_POST['realisateur'],$_POST['scenariste'],$_POST['producteur'],$_POST['date_sortie'],$_POST['quantite'],$_POST['image_dvd'],$_POST['description']);
 
-                        if($retour=='Le DVD a été ajouté')
-                        {
-                            ?>
-                            <p class="deeppink grand">
-                                <?php
-                                    print 'Le DVD ';
-                                    print_r($_POST['titre']);
-                                    print ' réalisé par ';
-                                    print_r($_POST['realisateur']);
-                                    print ' a bien été rajouté à la base de données.';
-                                ?>
-                            </p>
-                            <?php
+                                    if($retour=='Le DVD a été ajouté')
+                                    {
+                                        ?>
+                                        <p class="deeppink grand">
+                                            <?php
+                                                print 'Le DVD ';
+                                                print_r($_POST['titre']);
+                                                print ' réalisé par ';
+                                                print_r($_POST['realisateur']);
+                                                print ' a bien été rajouté à la base de données.';
+                                            ?>
+                                        </p>
+                                        <?php
+                                    }
+                                    else if ($retour!='Le DVD a été ajouté')
+                                    {
+                                        ?>
+                                        <p class="deeppink">Un problème est intervenue.</p>
+                                        <p class="deeppink">1.Les caractères spéciaux sont mal gérés par la base données.</p>
+                                        <p class="deeppink">2.La contrainte d'unicité sur le couple titre/realisateur a été violé.</p>
+                                        <p class="deeppink">3.Le lien utilisé pour l'image existe déjà dans la base de données.</p>
+                                        <?php
+                                    }
+                                }
+                                else
+                                {
+                                    echo '<p class="deeppink centre grand">Le réalisateur et le scénariste doivent être composé uniquement de lettres</p>';
+                                    echo '<p class="deeppink centre grand">Ils doivent également commencer par une majuscule</p>';
+                                    echo '<p class="deeppink centre grand">L image associé doit être au format : image2.jpg</p>';
+                                }
+                            }
+                            else
+                            {
+                                echo '<p class="deeppink centre grand">Le réalisateur et le scénariste doivent être composé uniquement de lettres</p>';
+                                echo '<p class="deeppink centre grand">Ils doivent également commencer par une majuscule</p>';
+                                echo '<p class="deeppink centre grand">L image associé doit être au format : image2.jpg</p>';
+                            }
                         }
-                        else if ($retour!='Le DVD a été ajouté')
+                        else
                         {
-                            ?>
-                            <p class="deeppink">Un problème est intervenue.</p>
-                            <p class="deeppink">1.Les caractères spéciaux sont mal gérés par la base données.</p>
-                            <p class="deeppink">2.La contrainte d'unicité sur le couple titre/realisateur a été violé.</p>
-                            <?php
+                            echo '<p class="deeppink centre grand">Le réalisateur et le scénariste doivent être composé uniquement de lettres</p>';
+                            echo '<p class="deeppink centre grand">Ils doivent également commencer par une majuscule</p>';
+                            echo '<p class="deeppink centre grand">L image associé doit être au format : image2.jpg</p>';
                         }
                     }
                     else
@@ -119,7 +147,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2 evidence" for="image_dvd">Image associé :</label>
                     <div class="col-sm-10"> 
-                        <input type="text" class="form-control" id="image_dvd" name="image_dvd" placeholder="nom de l'image avec son extension préalablement enregistrés dans le dossier images">
+                        <input type="text" class="form-control" id="image_dvd" name="image_dvd" placeholder="Exemple : image2.jpg">
                     </div>
                 </div>
                 <div class="form-group">
@@ -159,7 +187,7 @@
                             { ?>
                                 <!-- impossible de rendre les images responsives sans qu'elles se mettent les unes en dessous des autres -->
                                 <img class="img-rounded imagelocation" src="images/<?php  echo $tab[$i]['image_dvd']; ?>" 
-                                     title="Quantité : <?php echo utf8_encode($tab[$i]['quantite']);?>. Description : <?php echo utf8_encode($tab[$i]['description']);?>"/>
+                                     title="Titre : <?php echo utf8_encode($tab[$i]['titre']);?> || Quantité : <?php echo utf8_encode($tab[$i]['quantite']);?> || Description : <?php echo utf8_encode($tab[$i]['description']);?>"/>
                             <?php
                             }
                         }

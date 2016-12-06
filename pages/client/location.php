@@ -153,7 +153,7 @@
                             for($i = 0;$i < $nbr ;$i++)
                             { ?>
                                 <!-- impossible de rendre les images responsives sans qu'elles se mettent les unes en dessous des autres -->
-                                <img class="img-rounded imagelocation" src="images/<?php  echo $tab[$i]['image_dvd']; ?>" title="<?php echo utf8_encode($tab[$i]['description']);?>"/>
+                                <img class="img-rounded imagelocation" src="images/<?php  echo $tab[$i]['image_dvd']; ?>" title="Titre : <?php echo utf8_encode($tab[$i]['titre']);?> || Description : <?php echo utf8_encode($tab[$i]['description']);?>"/>
                             <?php
                             }
                         }

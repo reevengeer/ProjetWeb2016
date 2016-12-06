@@ -26,28 +26,57 @@
 		{
                     if($_POST['quantite']>=1)
                     {
-                        $log = new dvdBD($cnx);
-                        $retour=$log->modifierDVD($_SESSION['id_dvd'],$_POST['titre'],$_POST['realisateur'],$_POST['scenariste'],$_POST['producteur'],$_POST['date_sortie'],$_POST['quantite'],$_POST['image_dvd'],$_POST['description']);
+                        if(preg_match("#[A-Z -][A-Za-z -]+#",$_POST['realisateur']) == true )
+                        {
+                            if(preg_match("#[A-Z -][A-Za-z -]+#",$_POST['scenariste']) == true )
+                            {
+                                if(preg_match("#image[0-9]*\.[a-z]+#",$_POST['image_dvd']) == true )
+                                {
+                                    $log = new dvdBD($cnx);
+                                    $retour=$log->modifierDVD($_SESSION['id_dvd'],$_POST['titre'],$_POST['realisateur'],$_POST['scenariste'],$_POST['producteur'],$_POST['date_sortie'],$_POST['quantite'],$_POST['image_dvd'],$_POST['description']);
 
-                        if($retour=='DVD mis à jour')
-                        {
-                            ?>
-                            <p class="deeppink grand">
-                                <?php
-                                    print 'Le film ';
-                                    print_r($_POST['titre']);
-                                    print ' a bien été mis à jour dans la base de données.';
-                                ?>
-                                <br/>
-                            </p>
-                            <?php
+                                    if($retour=='DVD mis à jour')
+                                    {
+                                        ?>
+                                        <p class="deeppink grand">
+                                            <?php
+                                                print 'Le film ';
+                                                print_r($_POST['titre']);
+                                                print ' a bien été mis à jour dans la base de données.';
+                                            ?>
+                                            <br/>
+                                        </p>
+                                        <?php
+                                    }
+                                    else if ($retour!='DVD mis à jour')
+                                    {
+                                        ?>
+                                        <p class="deeppink grand souligner">Un problème est intervenue.</p>
+                                        <p class="deeppink">1.Les caractères spéciaux sont mal gérés par la base données.</p>
+                                        <p class="deeppink">2.La contrainte d'unicité sur le couple titre/realisateur a été violé.</p>
+                                        <p class="deeppink">3.Le lien utilisé pour l'image existe déjà dans la base de données.</p>
+                                        <?php
+                                    }
+                                }
+                                else
+                                {
+                                    echo '<p class="deeppink centre grand">Le réalisateur et le scénariste doivent être composé uniquement de lettres</p>';
+                                    echo '<p class="deeppink centre grand">Ils doivent également commencer par une majuscule</p>';
+                                    echo '<p class="deeppink centre grand">L image associé doit être au format : image2.jpg</p>';
+                                }
+                            }
+                            else
+                            {
+                                echo '<p class="deeppink centre grand">Le réalisateur et le scénariste doivent être composé uniquement de lettres</p>';
+                                echo '<p class="deeppink centre grand">Ils doivent également commencer par une majuscule</p>';
+                                echo '<p class="deeppink centre grand">L image associé doit être au format : image2.jpg</p>';
+                            }
                         }
-                        else if ($retour!='DVD mis à jour')
+                        else
                         {
-                            ?>
-                            <p class="evidence grand">Un problème est intervenue.</p>
-                            <br/>
-                            <?php
+                            echo '<p class="deeppink centre grand">Le réalisateur et le scénariste doivent être composé uniquement de lettres</p>';
+                            echo '<p class="deeppink centre grand">Ils doivent également commencer par une majuscule</p>';
+                            echo '<p class="deeppink centre grand">L image associé doit être au format : image2.jpg</p>';
                         }
                     }
                     else
