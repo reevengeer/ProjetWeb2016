@@ -25,7 +25,7 @@
         <title>Projet Web 2016</title>
     </head>
     
-    <body>
+    <body>    
         <div id="format">
             
 	    <header> 
@@ -76,9 +76,35 @@
                     }
                     ?>
                 </div>
-		<a href="index.php?page=deconnect.php">
-                    <img class="droite" src="./images/logo_sortie.png" alt="logo"/>
-                </a>
+                <?php
+                if(!isset($_SESSION['connexionClient']))
+                {
+                    if(!isset($_SESSION['connexionAdministrateur']))
+                    {
+                        ?>
+                        <a href="index.php?page=deconnect.php">
+                        <img class="droite" src="./images/logo_sortie.png" alt="logo" id="imageDeconnexion"/>
+                        </a>
+                        <?php
+                    }
+                    else
+                    {
+                        ?>
+                        <a href="index.php?page=deconnect.php">
+                        <img class="droite" src="./images/logo_sortie.png" alt="logo" id="imageDeconnexion1"/>
+                        </a>
+                        <?php
+                    }
+                }
+                else 
+                {
+                    ?>
+                    <a href="index.php?page=deconnect.php">
+                    <img class="droite" src="./images/logo_sortie.png" alt="logo" id="imageDeconnexion1"/>
+                    </a>
+                    <?php
+                }
+                ?>
                 </br></br>
             </footer>
 	</div>

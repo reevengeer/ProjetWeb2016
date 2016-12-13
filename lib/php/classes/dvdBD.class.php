@@ -79,7 +79,7 @@ class dvdBD
         $resultset -> bindValue(5,$_POST['producteur']);
         $resultset -> bindValue(6,$_POST['date_sortie']); 
         $resultset -> bindValue(7,$_POST['quantite']);
-        $resultset -> bindValue(8,$_POST['image_dvd']);
+        $resultset -> bindValue(8,$_FILES["image_dvd"]["name"]);
         $resultset -> bindValue(9,$_POST['description']);
 
         $resultset->execute();
@@ -101,7 +101,7 @@ class dvdBD
         $resultset -> bindValue(5,$_POST['producteur']);
         $resultset -> bindValue(6,$_POST['date_sortie']); 
         $resultset -> bindValue(7,$_POST['quantite']);
-        $resultset -> bindValue(8,$_POST['image_dvd']);
+        $resultset -> bindValue(8,$_FILES["image_dvd"]["name"]);
         $resultset -> bindValue(9,$_POST['description']);
 
         $resultset->execute();

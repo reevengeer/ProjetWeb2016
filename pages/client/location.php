@@ -16,6 +16,11 @@
 		?>
 </nav>
 <h1 class="aqua legerement_a_droite souligner">Location d'un DVD</h1>
+<div class="row">
+    <div class="col-sm-11">
+        <a href="pages/client/printLocation.php" target="_blank" class="droite le">Imprimer</a>
+    </div>
+</div>
 <div class='legerement_a_droite'>
     <?php 
             $flag=0;

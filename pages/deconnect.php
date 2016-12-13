@@ -14,7 +14,7 @@
 		    }
 		?>
 </nav>
-<h1 class="titre">Merci pour votre visite.</h1>
+<h1 class="titre">Merci pour votre visite</h1>
 <div class="evidence centre">
     <br/>
     <h3> Nous ésperons que l'expérience offerte fût agréable et au plaisir de vous revoir chez nous.</h3>

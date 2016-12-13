@@ -108,7 +108,7 @@
                 <div class="form-group">
                   <label class="control-label col-sm-2 evidence" for="ville">Ville :</label>
                   <div class="col-sm-10"> 
-                    <input type="text" class="form-inline" id="ville" name="ville" value="<?php echo $_SESSION['ville']; ?>">
+                    <input type="text" class="form-control" id="ville" name="ville" value="<?php echo $_SESSION['ville']; ?>">
                   </div>
                 </div>
                 <div class="form-group">
@@ -120,7 +120,7 @@
                 <div class="form-group">
                   <label class="control-label col-sm-2 evidence" for="login">Login :</label>
                   <div class="col-sm-10">
-                      <input type="text" class="form-inline" id="login" name="login" value="<?php echo $_SESSION['login']; ?>">
+                      <input type="text" class="form-control" id="login" name="login" value="<?php echo $_SESSION['login']; ?>">
                   </div>
                 </div>
                 <div class="form-group">

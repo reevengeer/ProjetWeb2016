@@ -17,85 +17,97 @@
 </nav>
 <h1 class="aqua legerement_a_droite souligner">Modification d'un DVD</h1>
 <?php 
-            $flag=0;
-            if(isset($_POST['Modifier']))
-            {
-                ?><br/><?php
-		if($_POST['titre']!="" && $_POST['realisateur']!=""&& $_POST['scenariste']!=""&& $_POST['producteur']!=""
-                        && $_POST['date_sortie']!=""&& $_POST['quantite']!=""&& $_POST['image_dvd']!="")
-		{
-                    if($_POST['quantite']>=1)
-                    {
-                        if(preg_match("#[A-Z -][A-Za-z -]+#",$_POST['realisateur']) == true )
-                        {
-                            if(preg_match("#[A-Z -][A-Za-z -]+#",$_POST['scenariste']) == true )
-                            {
-                                if(preg_match("#image[0-9]*\.[a-z]+#",$_POST['image_dvd']) == true )
-                                {
-                                    $log = new dvdBD($cnx);
-                                    $retour=$log->modifierDVD($_SESSION['id_dvd'],$_POST['titre'],$_POST['realisateur'],$_POST['scenariste'],$_POST['producteur'],$_POST['date_sortie'],$_POST['quantite'],$_POST['image_dvd'],$_POST['description']);
 
-                                    if($retour=='DVD mis à jour')
+    if(isset($_POST['Modifier']))
+    {
+        $target_dir = "C:\wamp\www\GitHub\ProjetWeb2016\images/";
+        $target_file = $target_dir . basename($_FILES["image_dvd"]["name"]);
+        $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+        $flag=0;
+            if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" )
+            {
+                echo '<p class="deeppink centre grand">Seul les fichers JPG, JPEG, PNG & GIF sont autorisés.</p>';
+            }
+            else 
+            {
+                if (move_uploaded_file($_FILES["image_dvd"]["tmp_name"], $target_file))
+                {
+                    if(isset($_POST['Modifier']))
+                    {
+                        ?><br/><?php
+                        if($_POST['titre']!="" && $_POST['realisateur']!=""&& $_POST['scenariste']!=""&& $_POST['producteur']!=""
+                                && $_POST['date_sortie']!=""&& $_POST['quantite']!="")
+                        {
+                            if($_POST['quantite']>=1)
+                            {
+                                if(preg_match("#[A-Z -][A-Za-z -]+#",$_POST['realisateur']) == true )
+                                {
+                                    if(preg_match("#[A-Z -][A-Za-z -]+#",$_POST['scenariste']) == true )
                                     {
-                                        ?>
-                                        <p class="deeppink grand">
-                                            <?php
-                                                print 'Le film ';
-                                                print_r($_POST['titre']);
-                                                print ' a bien été mis à jour dans la base de données.';
+                                        $log = new dvdBD($cnx);
+                                        $retour=$log->modifierDVD($_SESSION['id_dvd'],$_POST['titre'],$_POST['realisateur'],$_POST['scenariste'],$_POST['producteur'],$_POST['date_sortie'],$_POST['quantite'],$_FILES["image_dvd"]["tmp_name"],$_POST['description']);
+
+                                        if($retour=='DVD mis à jour')
+                                        {
                                             ?>
-                                            <br/>
-                                        </p>
-                                        <?php
+                                            <p class="deeppink grand">
+                                                <?php
+                                                    print 'Le film ';
+                                                    print_r($_POST['titre']);
+                                                    print ' a bien été mis à jour dans la base de données.';
+                                                    echo '<br/>L image associée a elle aussi bien été mise à jour';
+                                                ?>
+                                                <br/>
+                                            </p>
+                                            <?php
+                                        }
+                                        else if ($retour!='DVD mis à jour')
+                                        {
+                                            ?>
+                                            <p class="deeppink grand souligner">Un problème est intervenue.</p>
+                                            <p class="deeppink">1.Les caractères spéciaux sont mal gérés par la base données.</p>
+                                            <p class="deeppink">2.La contrainte d'unicité sur le couple titre/realisateur a été violé.</p>
+                                            <p class="deeppink">3.Le lien utilisé pour l'image existe déjà dans la base de données.</p>
+                                            <?php
+                                        }
                                     }
-                                    else if ($retour!='DVD mis à jour')
+                                    else
                                     {
-                                        ?>
-                                        <p class="deeppink grand souligner">Un problème est intervenue.</p>
-                                        <p class="deeppink">1.Les caractères spéciaux sont mal gérés par la base données.</p>
-                                        <p class="deeppink">2.La contrainte d'unicité sur le couple titre/realisateur a été violé.</p>
-                                        <p class="deeppink">3.Le lien utilisé pour l'image existe déjà dans la base de données.</p>
-                                        <?php
+                                        echo '<p class="deeppink centre grand">Le réalisateur et le scénariste doivent être composé uniquement de lettres</p>';
+                                        echo '<p class="deeppink centre grand">Ils doivent également commencer par une majuscule</p>';                           
                                     }
                                 }
                                 else
                                 {
                                     echo '<p class="deeppink centre grand">Le réalisateur et le scénariste doivent être composé uniquement de lettres</p>';
                                     echo '<p class="deeppink centre grand">Ils doivent également commencer par une majuscule</p>';
-                                    echo '<p class="deeppink centre grand">L image associé doit être au format : image2.jpg</p>';
                                 }
                             }
                             else
                             {
-                                echo '<p class="deeppink centre grand">Le réalisateur et le scénariste doivent être composé uniquement de lettres</p>';
-                                echo '<p class="deeppink centre grand">Ils doivent également commencer par une majuscule</p>';
-                                echo '<p class="deeppink centre grand">L image associé doit être au format : image2.jpg</p>';
+                                ?>
+                                    <p class="evidence grand">La quantité doit être supérieure ou égale à 1.</p>
+                                    <br/>
+                                <?php
                             }
                         }
                         else
                         {
-                            echo '<p class="deeppink centre grand">Le réalisateur et le scénariste doivent être composé uniquement de lettres</p>';
-                            echo '<p class="deeppink centre grand">Ils doivent également commencer par une majuscule</p>';
-                            echo '<p class="deeppink centre grand">L image associé doit être au format : image2.jpg</p>';
-                        }
-                    }
-                    else
-                    {
-                        ?>
-                            <p class="evidence grand">La quantité doit être supérieure ou égale à 1.</p>
-                            <br/>
-                        <?php
+                            ?>
+                                <p class="evidence grand">Vous devez tout compléter.</p>
+                                <br/>
+                             <?php
+                        }	
                     }
                 }
-		else
-		{
-               	    ?>
-                        <p class="evidence grand">Vous devez tout compléter.</p>
-                        <br/>
-                     <?php
-		}	
-            }
-        ?>
+                else
+                {
+                    echo '<p class="deeppink centre">Une erreur lors de l upload est intervenue</p>';
+                }
+            
+        }
+    }
+?>
 <div class='legerement_a_droite'>
     <h2 class='evidence'>Veuillez entrer les informations du DVD à modifier.</h2>
     <h3 class='deeppink'>Les caractères spéciaux sont à éviter.</h3>
@@ -162,56 +174,57 @@
             }
         ?>
             
-            <form action="index.php?page=administrateur/modifierDVD.php" method="POST" class="form-horizontal cadre">
+            <form action="index.php?page=administrateur/modifierDVD.php" method="POST" class="form-horizontal cadre" enctype="multipart/form-data">
                 
                 <div class="form-group">
-                  <label class="control-label col-sm-2 evidence" for="titre">Titre :</label>
-                  <div class="col-sm-10">
+                  <label class="control-label col-sm-3 evidence" for="titre">Titre :</label>
+                  <div class="col-sm-9">
                     <input type="text" class="form-inline" id="titre" name="titre" value="<?php echo $_SESSION['titre']; ?>">
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="control-label col-sm-2 evidence" for="realisateur">Réalisateur :</label>
-                  <div class="col-sm-10"> 
+                  <label class="control-label col-sm-3 evidence" for="realisateur">Réalisateur :</label>
+                  <div class="col-sm-9"> 
                     <input type="text" class="form-inline" id="realisateur" name="realisateur" value="<?php echo $_SESSION['realisateur']; ?>">
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="control-label col-sm-2 evidence" for="scenariste">Scénariste :</label>
-                  <div class="col-sm-10"> 
+                  <label class="control-label col-sm-3 evidence" for="scenariste">Scénariste :</label>
+                  <div class="col-sm-9"> 
                     <input type="text" class="form-inline" id="scenariste" name="scenariste" value="<?php echo $_SESSION['scenariste']; ?>">
                   </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-sm-2 evidence" for="producteur">Production :</label>
-                    <div class="col-sm-10"> 
+                    <label class="control-label col-sm-3 evidence" for="producteur">Production :</label>
+                    <div class="col-sm-9"> 
                       <input type="text" class="form-inline" id="producteur" name="producteur" value="<?php echo $_SESSION['producteur']; ?>">
                     </div>
                 </div>
                 <div class="form-group">
-                  <label class="control-label col-sm-2 evidence" for="date_sortie">Date de sortie :</label>
-                  <div class="col-sm-10">
-                      <input type="date" class="form-control" id="date_sortie" name="date_sortie" value="<?php echo $_SESSION['date_sortie']; ?>">
+                  <label class="control-label col-sm-3 evidence" for="date_sortie">Date de sortie :</label>
+                  <div class="col-sm-9">
+                      <input type="date" class="form-control" id="date_sortie" name="date_sortie" placeholder="Sa date de sortie">
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="control-label col-sm-2 evidence" for="quantite">Nombre de DVD disponibles :</label>
-                  <div class="col-sm-10"> 
+                  <label class="control-label col-sm-3 evidence" for="quantite">Nombre de DVD disponibles :</label>
+                  <div class="col-sm-9"> 
                       <input type="number" class="form-control" id="quantite" name="quantite" value="<?php echo $_SESSION['quantite']; ?>">
                   </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-sm-2 evidence" for="image_dvd">Image associé :</label>
-                    <div class="col-sm-10"> 
-                        <input type="text" class="form-control" id="image_dvd" name="image_dvd" value="<?php echo $_SESSION['lien_image']; ?>">
+                    <label class="control-label col-sm-3 evidence" for="image_dvd">Image associé :</label>
+                    <div class="col-sm-9"> 
+                        <input type="file" class="form-control" id="image_dvd" name="image_dvd" value="<?php echo $_SESSION['lien_image']; ?>">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-sm-2 evidence" for="description">Description :</label>
-                    <div class="col-sm-10"> 
+                    <label class="control-label col-sm-3 evidence" for="description">Description:</label>
+                    <div class="col-sm-9"> 
                         <input type="text" class="form-control" id="description" name="description" placeholder="Votre éventuelle description">
                     </div>
                 </div>
+                
                 <div class="form-group"> 
                   <div class="col-sm-offset-2 col-sm-10">
                     <button type="submit" class="btn btn-primary" value="Modifier" name="Modifier">Confirmer modification</button>

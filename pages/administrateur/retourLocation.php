@@ -25,8 +25,10 @@
             $flag=0;
             if(isset($_POST['Confirmer']))
             {
-		if(isset($_POST['choix']))
+		if((isset($_POST['choix'])))
 		{
+                    if((isset($_POST['film'])) && (isset($_POST['client'])))
+                    {
                         $log = new historiqueBD($cnx);
                         $data1=$log->historiqueDVDClient($_POST['film'],$_POST['client']);
 
@@ -167,13 +169,20 @@
                             <?php
                         }
                                        
+                    }
+                    else
+                    {
+                        ?>
+                            <p class="evidence grand">Un problème lors de la suppression est intervenu</p>
+                         <?php
+                    }
                 }
-		else
-		{
-               	    ?>
-                        <p class="evidence grand">Un problème lors de la suppression est intervenu</p>
-                     <?php
-		}
+            }
+            else 
+            {
+                ?>
+                    <p class="evidence grand">il n'y actuellement aucun DVD en location</p>
+                <?php
             }
         }
         else
