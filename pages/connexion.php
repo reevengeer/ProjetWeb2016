@@ -272,11 +272,11 @@ empechant la connexion pour une durée de 10 min -->
                 <div class='legerement_a_droite'>
                     <div class="container largeur">
                         <div class="evidence centre">
-                            <p id="cookies">
+                            <p id="cookies2">
                                 Nous utilisons des cookies pour personnaliser le contenu, ajuster et mesurer les publicités et offrir une expérience plus sûre. 
                                 En cliquant sur le site ou en le parcourant, vous nous autorisez à collecter des informations sur et en dehors de la vidéothèque du Geek via les cookies.
                                 Pour en savoir plus, notamment sur les moyens de contrôle disponibles, consultez la Politique d’utilisation des cookies
-                                <a id="suppressionTexte"><span class="glyphicon glyphicon-remove"></span></a>
+                                <a id="suppressionTexte2"><span class="glyphicon glyphicon-remove"></span></a>
                             </p>
                         </div>
                         <h1 class='titre'>Connexion</h1>

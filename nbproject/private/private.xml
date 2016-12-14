@@ -5,15 +5,19 @@
         <group>
             <file>file:/C:/wamp/www/GitHub/ProjetWeb2016/pages/administrateur/modifierDVD.php</file>
             <file>file:/C:/wamp/www/GitHub/ProjetWeb2016/lib/php/classes/Connexion.class.php</file>
+            <file>file:/C:/wamp/www/GitHub/ProjetWeb2016/pages/client/accueilClient.php</file>
             <file>file:/C:/wamp/www/GitHub/ProjetWeb2016/lib/php/classes/JsonBD.class.php</file>
             <file>file:/C:/wamp/www/GitHub/ProjetWeb2016/lib/php/ajax/AjaxFonctions.php</file>
             <file>file:/C:/wamp/www/GitHub/ProjetWeb2016/pages/connexion.php</file>
             <file>file:/C:/wamp/www/GitHub/ProjetWeb2016/index.php</file>
             <file>file:/C:/wamp/www/GitHub/ProjetWeb2016/pages/administrateur/ajoutDVD.php</file>
             <file>file:/C:/wamp/www/GitHub/ProjetWeb2016/lib/php/dbConnectProjetLocal.php</file>
+            <file>file:/C:/wamp/www/GitHub/ProjetWeb2016/lib/php/classes/clientBD.class.php</file>
             <file>file:/C:/wamp/www/GitHub/ProjetWeb2016/pages/client/printLocation.php</file>
             <file>file:/C:/wamp/www/GitHub/ProjetWeb2016/pages/client/location.php</file>
+            <file>file:/C:/wamp/www/GitHub/ProjetWeb2016/pages/accueil.php</file>
             <file>file:/C:/wamp/www/GitHub/ProjetWeb2016/lib/javaScript/functionsJquery.js</file>
+            <file>file:/C:/wamp/www/GitHub/ProjetWeb2016/pages/footer.php</file>
             <file>file:/C:/wamp/www/GitHub/ProjetWeb2016/pages/administrateur/retourLocation.php</file>
             <file>file:/C:/wamp/www/GitHub/ProjetWeb2016/pages/client/modifierClient.php</file>
             <file>file:/C:/wamp/www/GitHub/ProjetWeb2016/pages/deconnect.php</file>
